@@ -60,3 +60,5 @@ buck-out/
 
 random/
 kodo_gabalai/
+
+*.AppImage
