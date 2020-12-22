@@ -27,3 +27,19 @@
 * Add new task button
 * Edit Task component
 * Edit Stats component
+
+
+
+# Realm
+
+*.realm files are located at
+`/data/data/com.projektelis/files/default.realm`
+
+# adb
+
+Cheatsheet: https://www.automatetheplanet.com/adb-cheat-sheet/
+`adb root` `adb unroot`
+
+`adb pull /data/data/com.projektelis/files/default.realm ./realmdata`
+
+

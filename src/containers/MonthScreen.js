@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 
-const MonthSchema = () => {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Month!</Text>
-    </View>
-  );
-};
+export default class StatsScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-export default MonthSchema;
+  render() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Month!</Text>
+      </View>
+    );
+  }
+}

@@ -43,7 +43,7 @@ export default function CalendarButtonDropDown(props) {
     <View>
       <Button title={props.currentDate.toDateString()} onPress={toggleModal} />
       <Modal
-        style={{margin: 0, position: 'relative'}}
+        style={{margin: 0, position: 'absolute'}}
         isVisible={isModalVisible}
         onBackdropPress={() => setModalVisible(false)}
         onBackButtonPress={() => setModalVisible(false)}

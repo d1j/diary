@@ -62,3 +62,6 @@ random/
 kodo_gabalai/
 
 *.AppImage
+
+realmdata/
+test.js
