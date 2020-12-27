@@ -53,7 +53,7 @@ export default class _DebugWindow extends Component {
   }
   render() {
     return (
-      <View>
+      <View style={{borderWidth: 4, borderColor: 'red', marginTop: 20}}>
         <Button
           onPress={() => {
             this._generateData();

@@ -56,7 +56,7 @@ const days = [
       wentToSleep: new Date(2020, 11, 22, 23, 0, 0, 0),
       sleepTime: 32400000,
     },
-    isFinished: false,
+    isFinished: true,
   },
   {
     day: 23,

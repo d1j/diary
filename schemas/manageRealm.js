@@ -15,12 +15,12 @@ const addNewEmptyDayEntry = (date) => {
     miscTasks: [],
     basicNotes: '',
     stats: {
-      mood: undefined,
-      energy: undefined,
-      motivation: undefined,
-      wokeUp: undefined,
-      wentToSleep: undefined,
-      sleepTime: undefined,
+      mood: null,
+      energy: null,
+      motivation: null,
+      wokeUp: null,
+      wentToSleep: null,
+      sleepTime: null,
     },
   };
   realm.write(() => {

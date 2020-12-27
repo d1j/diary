@@ -9,17 +9,16 @@
 
 # Components
 
-* Date (works as a button; expands to a calendar Window)
+* `CallendarButtonDropDown` (works as a button; expands to a calendar Window)
   * Overlapping window where you can specify which day/month/year to go to.
-* Time based task section (Custom component)
-* List of Tasks
-* Single task should function as a button. Whenever it is long-pressed, the Edit task component opens and you can edit the name, delete or mark the task as done. There is a “complete the task” bubble. Once you click on it, the task is greyed out and you can delete it by clicking on the “X” button.
-
-* Misc task section (Custom component). Same component as time based task, but * without time.
-  * Basic notes (Text box)
-  * Stats Window (after day is finished) contains the following: 
-  * Time when I WentToSleep;
-  * Time when I woke up;
+* `TaskSection` Time based task section
+  * List of `Task`s
+  * **(Depends on a design)** Single task should function as a button. Whenever it is long-pressed, the Edit task component opens and you can edit the name, delete or mark the task as done. There is a “complete the task” bubble. Once you click on it, the task is greyed out and you can delete it by clicking on the “X” button.
+* `TaskSection` Misc task section.
+* `NotesSection` Basic notes
+* `StatsSection` Stats Window (after day is finished) contains the following: 
+  * Time I WentToSleep;
+  * Time I woke up;
   * Mood scale
   * Energy level scale
   * Motivation level scale
