@@ -1,4 +1,7 @@
-const TimeBasedTaskSchema = {
+import Realm from 'realm';
+
+class TimeBasedTask extends Realm.Object {}
+TimeBasedTask.schema = {
   name: 'TimeBasedTask',
   embedded: true,
   properties: {
@@ -11,7 +14,8 @@ const TimeBasedTaskSchema = {
   },
 };
 
-const MiscTaskSchema = {
+class MiscTask extends Realm.Object {}
+MiscTask.schema = {
   name: 'MiscTask',
   embedded: true,
   properties: {
@@ -22,7 +26,8 @@ const MiscTaskSchema = {
   },
 };
 
-const DayStatsSchema = {
+class DayStats extends Realm.Object {}
+DayStats.schema = {
   name: 'DayStats',
   embedded: true,
   properties: {
@@ -35,11 +40,12 @@ const DayStatsSchema = {
   },
 };
 
-const DaySchema = {
+class Day extends Realm.Object {}
+Day.schema = {
   name: 'Day',
   properties: {
-    day: {type: 'int'},
-    month: {type: 'int'},
+    day: {type: 'int', min: 1, max: 31},
+    month: {type: 'int', min: 0, max: 11}, //!!!
     year: {type: 'int'},
     timeBasedTasks: {type: 'list', objectType: 'TimeBasedTask'},
     miscTasks: {type: 'list', objectType: 'MiscTask'},
@@ -49,7 +55,8 @@ const DaySchema = {
   },
 };
 
-const MonthDayStatsSchema = {
+class MonthDayStats extends Realm.Object {}
+MonthDayStats.schema = {
   name: 'MonthDayStats',
   embedded: true,
   properties: {
@@ -58,7 +65,8 @@ const MonthDayStatsSchema = {
   },
 };
 
-const MonthStatsSchema = {
+class MonthStats extends Realm.Object {}
+MonthStats.schema = {
   name: 'MonthStats',
   embedded: true,
   properties: {
@@ -70,7 +78,8 @@ const MonthStatsSchema = {
   },
 };
 
-const MonthSchema = {
+class Month extends Realm.Object {}
+Month.schema = {
   name: 'Month',
   properties: {
     year: {type: 'int'},
@@ -80,12 +89,14 @@ const MonthSchema = {
   },
 };
 
-module.exports = [
-  TimeBasedTaskSchema,
-  MiscTaskSchema,
-  DaySchema,
-  DayStatsSchema,
-  MonthDayStatsSchema,
-  MonthStatsSchema,
-  MonthSchema,
-];
+export default new Realm({
+  schema: [
+    TimeBasedTask,
+    MiscTask,
+    Day,
+    DayStats,
+    MonthDayStats,
+    MonthStats,
+    Month,
+  ],
+});

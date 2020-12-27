@@ -42,4 +42,14 @@ Cheatsheet: https://www.automatetheplanet.com/adb-cheat-sheet/
 
 `adb pull /data/data/com.projektelis/files/default.realm ./realmdata`
 
+`cd /data/data/com.projektelis/files`
+
+# react native snippets
+
+`rconst` - constructor with state
+`rnc` - react native class
+
+# pakalbeti apie:
+
+# random
 
