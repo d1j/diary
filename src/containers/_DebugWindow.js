@@ -36,6 +36,7 @@ export default class _DebugWindow extends Component {
         _data.miscTasks.forEach((obj) => {
           day.miscTasks.push(obj);
         });
+        console.log('Dev: Data generated');
       });
     } catch (err) {
       console.log(err);
@@ -45,10 +46,12 @@ export default class _DebugWindow extends Component {
 
   _showData() {
     let days = realm.objects('Day');
+    console.log('Dev: Displaying data');
     console.log(JSON.stringify(days, null, 2));
   }
 
   _deleteData() {
+    console.log('Dev: Data deleted');
     Realm.deleteFile(realm);
   }
   render() {

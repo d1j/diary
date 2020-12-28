@@ -12,10 +12,15 @@ export default class NotesSection extends Component {
     return (
       <View>
         <TextInput
-          onSubmitEditing={(e) => {
+          onChange={(e) => {
             this.props.saveNewNotes(e.nativeEvent.text);
           }}
-          multiline={true}></TextInput>
+          onEndEditing={() => {
+            this.props.saveNotesToDb();
+          }}
+          multiline={true}
+          placeholder="Text before input"
+          value={this.props.notesData}></TextInput>
       </View>
     );
   }
