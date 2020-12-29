@@ -10,7 +10,9 @@ function toHumanDateFormat(date) {
   }`;
 }
 
-export default function CalendarButtonDropDown(props) {
+//TODO: marked dates
+
+export default function CalendarButtonModal(props) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [markedDates, setMarkedDate] = useState({
     //['2020-11-04']: {

@@ -3,13 +3,11 @@ import {ScrollView, Button} from 'react-native';
 import {Text} from 'react-native-elements';
 import Collapsible from 'react-native-collapsible';
 
-import _ from 'lodash';
-
-import CalendarButtonDropDown from '../components/CalendarButtonDropDown';
+import CalendarButtonModal from '../components/CalendarButtonModal';
 import TaskSection from '../components/TaskSection';
 import NotesSection from '../components/NotesSection';
 import StatsSection from '../components/StatsSection';
-import EditTaskButton from '../components/EditTaskButton';
+import AddNewTaskButtonModal from '../components/AddNewTaskButtonModal';
 
 import _DebugWindow from './_DebugWindow';
 
@@ -40,9 +38,17 @@ export default class DayScreen extends Component {
     }
 
     this.state = {
+      // _testTaskData: {
+      //   id: 1,
+      //   start: new Date(2020, 11, 22, 12, 30, 0, 0),
+      //   end: new Date(2020, 11, 22, 13, 30, 0, 0),
+      //   taskName: 'Write down some test data',
+      //   taskDescription: 'yeet',
+      //   taskIsTimeBased: true,
+      // },
       currentDate: _currentDay,
       id: _currentDayData.id,
-      timeBasedTasks: _currentDayData.timeBasedTasks,
+      timeBasedTasks: _currentDayData.timeBasedTasks, //TODO: keep timeBasedTasks sorted by start time
       miscTasks: _currentDayData.miscTasks,
       basicNotes: _currentDayData.basicNotes,
       stats: _currentDayData.stats,
@@ -55,8 +61,7 @@ export default class DayScreen extends Component {
 
     this.setCurrentDate = this.setCurrentDate.bind(this);
     this.finishCurrentDay = this.finishCurrentDay.bind(this);
-    this.addNewMiscTask = this.addNewMiscTask.bind(this);
-    this.addNewTbTask = this.addNewTbTask.bind(this);
+    this.addNewTask = this.addNewTask.bind(this);
   }
 
   //Calendar
@@ -68,7 +73,6 @@ export default class DayScreen extends Component {
     // If newDay entry does not exist in DB, create new empty entry
     if (newCurrentDayData == undefined) {
       newCurrentDayData = db.addNewEmptyDayEntry(newDate);
-      console.log(newCurrentDayData);
     }
     this.setState({
       currentDate: newDate,
@@ -92,19 +96,6 @@ export default class DayScreen extends Component {
   }
   //-----------------------------------------------------
 
-  //MiscTask
-  //-----------------------------------------------------
-  addNewMiscTask() {
-    console.log('Add/Edit task Modal pops up');
-    //TODO: make that the EditTaskWindow would pop up as a modal
-  }
-  //-----------------------------------------------------
-
-  //TimeBasedTask
-  //-----------------------------------------------------
-  addNewTbTask() {}
-  //-----------------------------------------------------
-
   //Finish day
   //-----------------------------------------------------
   finishCurrentDay() {
@@ -116,12 +107,15 @@ export default class DayScreen extends Component {
   }
   //-----------------------------------------------------
 
-  componentDidMount() {}
+  //Add new task
+  //-----------------------------------------------------
+  addNewTask() {}
+  //-----------------------------------------------------
 
   render() {
     return (
       <ScrollView style={{flex: 1}}>
-        <CalendarButtonDropDown
+        <CalendarButtonModal
           currentDate={this.state.currentDate}
           setCurrentDate={this.setCurrentDate}
         />
@@ -155,7 +149,8 @@ export default class DayScreen extends Component {
           </Collapsible>
         )}
 
-        <EditTaskButton currentDate={this.state.currentDate} />
+        {!this.state.isFinished && <AddNewTaskButtonModal />}
+
         {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
           <Button title="Finish day" onPress={this.finishCurrentDay} />
         )}

@@ -22,32 +22,27 @@ export default class Task extends Component {
     } else {
     }
     return (
-      <View>
-        {this.props.taskData.map((task, idx) => {
-          return (
-            <View key={idx} style={{borderWidth: 2}}>
-              <Text>Task name: {task.taskName}</Text>
-              {/* Inline If with Logical && Operator below */}
-              {task.description != null && (
-                <Text>Description: {task.description}</Text>
-              )}
-              {task.start != undefined && (
-                <Text>
-                  Start time:{' '}
-                  {`${task.start.getHours()}:${task.start.getMinutes()}`}
-                </Text>
-              )}
-              {task.end != undefined && (
-                <Text>
-                  End time: {`${task.end.getHours()}:${task.end.getMinutes()}`}
-                </Text>
-              )}
+      <View style={{borderWidth: 2}}>
+        <Text>Task name: {this.props.taskData.taskName}</Text>
+        {/* Inline If with Logical && Operator below */}
+        {this.props.taskData.description != null && (
+          <Text>Description: {this.props.taskData.description}</Text>
+        )}
+        {this.props.taskData.start != undefined && (
+          <Text>
+            Start time:{' '}
+            {`${this.props.taskData.start.getHours()}:${this.props.taskData.start.getMinutes()}`}
+          </Text>
+        )}
+        {this.props.taskData.end != undefined && (
+          <Text>
+            End time:{' '}
+            {`${this.props.taskData.end.getHours()}:${this.props.taskData.end.getMinutes()}`}
+          </Text>
+        )}
 
-              <Text>isDone: {task.isDone ? 'yes' : 'no'}</Text>
-              <Text>isDeleted: {task.isDone ? 'yes' : 'no'}</Text>
-            </View>
-          );
-        })}
+        <Text>isDone: {this.props.taskData.isDone ? 'yes' : 'no'}</Text>
+        <Text>isDeleted: {this.props.taskData.isDone ? 'yes' : 'no'}</Text>
       </View>
     );
   }

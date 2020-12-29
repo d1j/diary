@@ -24,7 +24,9 @@ export default class TimeBasedTaskSection extends Component {
     } else {
       return (
         <View>
-          <Task taskData={this.props.taskList}></Task>
+          {this.props.taskList.map((task, idx) => {
+            return <Task key={idx} taskData={task}></Task>;
+          })}
         </View>
       );
     }

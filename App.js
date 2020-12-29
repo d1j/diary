@@ -6,9 +6,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DayScreen from './src/containers/DayScreen';
 import MonthScreen from './src/containers/MonthScreen';
 import StatsScreen from './src/containers/StatsScreen';
+import {View} from 'react-native';
+
+// import AddNewTaskButton from './src/components/AddNewTaskWindow';
+// export default function App() {
+//   return (
+//     <View>
+//       <AddNewTaskButton></AddNewTaskButton>
+//     </View>
+//   );
+// }
 
 const Tab = createBottomTabNavigator();
-
 export default function App() {
   return (
     <NavigationContainer>

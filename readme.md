@@ -6,6 +6,7 @@
 * Ikonos: https://github.com/oblador/react-native-vector-icons (https://ionicons.com/)
   * Ikonu lib'a reikejo sulink'int https://reactnative.dev/docs/linking-libraries-ios
 * Collapse: https://github.com/oblador/react-native-collapsible
+* DateTimePicker: https://www.npmjs.com/package/@react-native-community/datetimepicker#onchange-optional
 
 # Components
 
@@ -47,6 +48,7 @@ Cheatsheet: https://www.automatetheplanet.com/adb-cheat-sheet/
 
 `rconst` - constructor with state
 `rnc` - react native class
+`bnd` - method bind
 
 # pakalbeti apie:
 
