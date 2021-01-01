@@ -11,7 +11,7 @@ export default function EditTaskButtonModal(props) {
   };
   return (
     <View>
-      <Button title="Add new task" onPress={toggleModal} />
+      <Button title="Edit a task" onPress={toggleModal} />
       <Modal
         style={{backgroundColor: 'white', flex: 1}}
         isVisible={isModalVisible}
@@ -19,7 +19,11 @@ export default function EditTaskButtonModal(props) {
         onBackButtonPress={() => setisModalVisible(false)}
         animationIn="slideInDown"
         animationOut="slideOutUp">
-        <TaskEditWindow data={props.data} toggleModal={toggleModal} />
+        <TaskEditWindow
+          setData={props.setData}
+          data={props.data}
+          toggleModal={toggleModal}
+        />
       </Modal>
     </View>
   );

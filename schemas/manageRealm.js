@@ -1,4 +1,5 @@
 import realm from './realm';
+import _ from 'lodash';
 
 const realmFilters = {
   dayMonthYear: (date) => {
@@ -55,29 +56,70 @@ const finishDay = (id) => {
 };
 
 const getNextTaskId = (arr) => {
-  Math.max.apply(
-    Math,
-    arr.map(function (o) {
-      return o.id;
-    }),
-  );
+  if (arr.length > 0) {
+    let maxId = -1;
+    arr.forEach((obj) => {
+      if (obj.id > maxId) {
+        maxId = obj.id;
+      }
+    });
+    return maxId + 1;
+  } else {
+    return 1;
+  }
 };
 
-const addMiscTask = (id, miscTask) => {
+const addNewTbTask = (date, data) => {
+  //Check if db entry at the given date exists
+  let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+  if (day === undefined) {
+    addNewEmptyDayEntry(date);
+  }
   realm.write(() => {
-    let day = realm.create('Day', {id}, true);
-    let nextId = getNextTaskId(day.miscTasks);
-    miscTask.id = nextId;
-    day.miscTask.push(miscTask);
+    let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+    let nextId = getNextTaskId(day.timeBasedTasks);
+    data.id = nextId;
+    day.timeBasedTasks.push(data);
   });
 };
 
-const addTimeBasedTask = (id, tbTask) => {
+const addNewMiscTask = (date, data) => {
+  //Check if db entry at the given date exists
+  let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+  if (day === undefined) {
+    addNewEmptyDayEntry(date);
+  }
   realm.write(() => {
-    let day = realm.create('Day', {id}, true);
-    let nextId = getNextTaskId(day.timeBasedTasks);
-    tbTask.id = nextId;
-    day.timeBasedTasks.push(tbTask);
+    let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+    let nextId = getNextTaskId(day.miscTasks);
+    data.id = nextId;
+    day.miscTasks.push(data);
+  });
+};
+
+const getLastTbTaskId = (date) => {
+  let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+  return getNextTaskId(day.timeBasedTasks) - 1;
+};
+
+const getLastMiscTaskId = (date) => {
+  let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+  return getNextTaskId(day.miscTasks) - 1;
+};
+
+const removeTbTask = (date, taskId) => {
+  realm.write(() => {
+    let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+    let taskToremove = day.timeBasedTasks.filtered(`id = ${taskId}`);
+    realm.delete(taskToremove);
+  });
+};
+
+const removeMiscTask = (date, taskId) => {
+  realm.write(() => {
+    let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+    let taskToremove = day.miscTasks.filtered(`id = ${taskId}`);
+    realm.delete(taskToremove);
   });
 };
 
@@ -86,6 +128,10 @@ export default {
   findDayByDate,
   saveBasicNotes,
   finishDay,
-  addMiscTask,
-  addTimeBasedTask,
+  addNewTbTask,
+  addNewMiscTask,
+  getLastTbTaskId,
+  getLastMiscTaskId,
+  removeTbTask,
+  removeMiscTask,
 };

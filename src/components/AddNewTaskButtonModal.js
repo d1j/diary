@@ -19,7 +19,7 @@ export default function AddNewTaskButtonModal(props) {
         onBackButtonPress={() => setisModalVisible(false)}
         animationIn="slideInDown"
         animationOut="slideOutUp">
-        <TaskEditWindow toggleModal={toggleModal} />
+        <TaskEditWindow setData={props.setData} toggleModal={toggleModal} />
       </Modal>
     </View>
   );

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {View, Button} from 'react-native';
 import {Text} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Modal from 'react-native-modal';
 import {TextInput} from 'react-native';
 
 const formatHoursMinutes = (date) => {
@@ -14,6 +13,15 @@ const formatHoursMinutes = (date) => {
   }`;
 };
 
+const formatDate = (date) => {
+  if (date == null) return 'YYYY-MM-DD';
+  return `${date.getFullYear()}-${
+    (date.getMonth() + 1) / 10 < 1
+      ? '0' + (date.getMonth() + 1)
+      : date.getMonth() + 1
+  }-${date.getDate() / 10 < 1 ? '0' + date.getDate() : date.getDate()}`;
+};
+
 /** If you are using this component to update task, please provide the following prop:
  * prop.data = {
  *  id: taskId,
@@ -21,7 +29,20 @@ const formatHoursMinutes = (date) => {
  *  end: taskEndTime,
  *  taskName: taskName,
  *  taskIsTimeBased: true/false
+ *  date: task Date()
  * }
+ *
+ * submitData() sets the following
+ * {
+ *  taskIsTimeBased: true/false,
+ *  start: taskStartTime,
+ *  end: taskEndTime,
+ *  taskName: taskName,
+ *  description: taskDescription
+ *  date: taskDate
+ * }
+ *
+ *
  */
 export default class TaskEditWindow extends Component {
   constructor(props) {
@@ -31,15 +52,22 @@ export default class TaskEditWindow extends Component {
       currentDate: null,
       showStartTimePicker: false,
       showEndTimePicker: false,
+      showDatePicker: false,
       taskIsTimeBased: true,
-      taskStartTime: null,
-      taskEndTime: null,
-      taskName: '',
+      // taskStartTime: null,
+      // taskEndTime: null,
+      // taskName: '',
+      // taskDate: null,
+      taskStartTime: new Date(2021, 0, 1, 12, 0, 0, 0),
+      taskEndTime: new Date(2021, 0, 1, 14, 0, 0, 0),
+      taskName: 'asd',
+      taskDate: new Date(2021, 0, 1, 0, 0, 0, 0),
       taskDescription: null,
     };
     //in case we are editing existing task:
     if (this.props.data) {
       this.state.id = this.props.data.id;
+      this.state.taskDate = this.props.data.date;
       this.state.taskStartTime = this.props.data.start;
       this.state.taskEndTime = this.props.data.end;
       this.state.taskName = this.props.data.taskName;
@@ -49,6 +77,7 @@ export default class TaskEditWindow extends Component {
     this.toggleStartTimePicker = this.toggleStartTimePicker.bind(this);
     this.toggleEndTimePicker = this.toggleEndTimePicker.bind(this);
     this.submitData = this.submitData.bind(this);
+    this.toggleDatePicker = this.toggleDatePicker.bind(this);
   }
 
   toggleStartTimePicker() {
@@ -62,6 +91,11 @@ export default class TaskEditWindow extends Component {
     });
   }
 
+  toggleDatePicker() {
+    this.setState({
+      showDatePicker: !this.state.showDatePicker,
+    });
+  }
   //TODO: check if valid start/end times are set
   changeStartTime(event, date) {
     //event types: set/dismissed
@@ -76,6 +110,11 @@ export default class TaskEditWindow extends Component {
     else if (event.type === 'dismissed') this.setState({taskEndTime: null});
   }
 
+  changeDate(event, date) {
+    this.setState({showDatePicker: false});
+    if (event.type === 'set') this.setState({taskDate: date});
+    else if (event.type === 'dismissed') this.setState({taskDate: null});
+  }
   submitData() {
     try {
       //validate time interval
@@ -95,16 +134,21 @@ export default class TaskEditWindow extends Component {
         returnObject.end = this.state.taskEndTime;
       }
 
+      //validate task date
+      if (this.state.taskDate === null) throw 3;
+      returnObject.date = this.state.taskDate;
+
       //validate and set task name
-      if (this.state.taskName === '' || this.state.taskName === null) throw 3;
+      if (this.state.taskName === '' || this.state.taskName === null) throw 4;
       returnObject.taskName = this.state.taskName;
 
       //set task desription
-      returnObject.taskDescription =
+      returnObject.description =
         this.state.taskDescription === '' ? null : this.state.taskDescription;
 
       //TODO: return new task data
-      console.log(returnObject);
+      this.props.setData(returnObject);
+      this.props.toggleModal();
     } catch (err) {
       //TODO: prompt users with error msg
       switch (err) {
@@ -118,6 +162,9 @@ export default class TaskEditWindow extends Component {
           console.log('Invalid time interval');
           break;
         case 3:
+          console.log('Invalid date');
+          break;
+        case 4:
           console.log('Task name not specified');
           break;
         default:
@@ -171,6 +218,18 @@ export default class TaskEditWindow extends Component {
               />
             )}
           </View>
+        )}
+        <Text>Task date</Text>
+        <Button
+          title={formatDate(this.state.taskDate)}
+          onPress={this.toggleDatePicker}></Button>
+        {this.state.showDatePicker && (
+          <DateTimePicker
+            value={this.state.taskDate ? this.state.taskDate : new Date()}
+            mode="date"
+            display="default"
+            onChange={this.changeDate.bind(this)}
+          />
         )}
         <Text>Task name</Text>
         <TextInput
