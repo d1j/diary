@@ -1,9 +1,16 @@
 import realm from './realm';
-import _ from 'lodash';
+
+const getDayDateInterval = (date) => {
+  let start = new Date(date);
+  start.setHours(0, 0, 0, 0);
+  let end = new Date(start.getTime() + 86400000);
+  return {start, end};
+};
 
 const realmFilters = {
-  dayMonthYear: (date) => {
-    return `day = ${date.getDate()} AND month = ${date.getMonth()} AND year = ${date.getFullYear()}`;
+  dayInterval: (date) => {
+    let dayInterv = getDayDateInterval(date);
+    return ['date >= $0 && date < $1', dayInterv.start, dayInterv.end];
   },
 };
 
@@ -15,23 +22,11 @@ const getPrimaryKeyId = (model) => {
 };
 // -------------------------------------
 const addNewEmptyDayEntry = (date) => {
-  let newId = getPrimaryKeyId('Day');
   let newDayData = {
-    id: newId,
-    day: date.getDate(),
-    month: date.getMonth(),
-    year: date.getFullYear(),
-    timeBasedTasks: [],
-    miscTasks: [],
+    id: getPrimaryKeyId('Day'),
+    date: date,
     basicNotes: '',
-    stats: {
-      mood: null,
-      energy: null,
-      motivation: null,
-      wokeUp: null,
-      wentToSleep: null,
-      sleepTime: null,
-    },
+    isFinished: false,
   };
   realm.write(() => {
     realm.create('Day', newDayData);
@@ -39,8 +34,55 @@ const addNewEmptyDayEntry = (date) => {
   return newDayData;
 };
 
-const findDayByDate = (date) => {
-  return realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
+const findDay = (date) => {
+  //Check if db entry at the given date exists
+  let day = realm.objects('Day').filtered(...realmFilters.dayInterval(date))[0];
+  if (day === undefined) {
+    //create new empty db entry
+    day = addNewEmptyDayEntry(date);
+  }
+  return day;
+};
+
+const findTBDayTasks = (date) => {
+  let tasks = realm
+    .objects('TimeBasedTask')
+    .filtered(...realmFilters.dayInterval(date));
+  return tasks;
+};
+
+const findMiscDayTasks = (date) => {
+  let tasks = realm
+    .objects('MiscTask')
+    .filtered(...realmFilters.dayInterval(date));
+  return tasks;
+};
+
+const addEmptyStatsEntry = (date) => {
+  let newDayStatsData = {
+    id: getPrimaryKeyId('DayStats'),
+    date: date,
+    mood: null,
+    energy: null,
+    motivation: null,
+    wokeUp: null,
+    wentToSleep: null,
+    sleepTime: null,
+  };
+  realm.write(() => {
+    realm.create('DayStats', newDayStatsData);
+  });
+  return newDayStatsData;
+};
+
+const findDayStats = (date) => {
+  let stats = realm
+    .objects('DayStats')
+    .filtered(...realmFilters.dayInterval(date))[0];
+  if (stats === undefined) {
+    stats = addEmptyStatsEntry(date);
+  }
+  return stats;
 };
 
 const saveBasicNotes = (id, text) => {
@@ -55,83 +97,48 @@ const finishDay = (id) => {
   });
 };
 
-const getNextTaskId = (arr) => {
-  if (arr.length > 0) {
-    let maxId = -1;
-    arr.forEach((obj) => {
-      if (obj.id > maxId) {
-        maxId = obj.id;
-      }
-    });
-    return maxId + 1;
-  } else {
-    return 1;
-  }
+const addNewTbTask = (data) => {
+  data.id = getPrimaryKeyId('TimeBasedTask');
+  realm.write(() => {
+    realm.create('TimeBasedTask', data);
+  });
+  return data.id;
 };
 
-const addNewTbTask = (date, data) => {
-  //Check if db entry at the given date exists
-  let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
-  if (day === undefined) {
-    addNewEmptyDayEntry(date);
-  }
+const addNewMiscTask = (data) => {
+  data.id = getPrimaryKeyId('MiscTask');
   realm.write(() => {
-    let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
-    let nextId = getNextTaskId(day.timeBasedTasks);
-    data.id = nextId;
-    day.timeBasedTasks.push(data);
+    realm.create('MiscTask', data);
+  });
+  return data.id;
+};
+
+const removeTbTask = (taskId) => {
+  realm.write(() => {
+    let task = realm.objectForPrimaryKey('TimeBasedTask', taskId);
+    if (task) realm.delete(task);
+    else console.log(`Could not remove non-existing TBtask ${taskId}`);
   });
 };
 
-const addNewMiscTask = (date, data) => {
-  //Check if db entry at the given date exists
-  let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
-  if (day === undefined) {
-    addNewEmptyDayEntry(date);
-  }
+const removeMiscTask = (taskId) => {
   realm.write(() => {
-    let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
-    let nextId = getNextTaskId(day.miscTasks);
-    data.id = nextId;
-    day.miscTasks.push(data);
-  });
-};
-
-const getLastTbTaskId = (date) => {
-  let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
-  return getNextTaskId(day.timeBasedTasks) - 1;
-};
-
-const getLastMiscTaskId = (date) => {
-  let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
-  return getNextTaskId(day.miscTasks) - 1;
-};
-
-const removeTbTask = (date, taskId) => {
-  realm.write(() => {
-    let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
-    let taskToremove = day.timeBasedTasks.filtered(`id = ${taskId}`);
-    realm.delete(taskToremove);
-  });
-};
-
-const removeMiscTask = (date, taskId) => {
-  realm.write(() => {
-    let day = realm.objects('Day').filtered(realmFilters.dayMonthYear(date))[0];
-    let taskToremove = day.miscTasks.filtered(`id = ${taskId}`);
-    realm.delete(taskToremove);
+    let task = realm.objectForPrimaryKey('MiscTask', taskId);
+    if (task) realm.delete(task);
+    else console.log(`Could not remove non-existing miscTask ${taskId}`);
   });
 };
 
 export default {
   addNewEmptyDayEntry,
-  findDayByDate,
+  findDay,
+  findTBDayTasks,
+  findMiscDayTasks,
+  findDayStats,
   saveBasicNotes,
   finishDay,
   addNewTbTask,
   addNewMiscTask,
-  getLastTbTaskId,
-  getLastMiscTaskId,
   removeTbTask,
   removeMiscTask,
 };

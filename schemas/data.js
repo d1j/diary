@@ -2,8 +2,9 @@
 const timeBasedTasks = [
   {
     id: 1,
-    start: new Date(2020, 11, 22, 12, 30, 0, 0),
-    end: new Date(2020, 11, 22, 13, 30, 0, 0),
+    date: new Date(2021, 0, 1, 0, 0, 0, 0),
+    start: new Date(2021, 0, 1, 12, 30, 0, 0),
+    end: new Date(2021, 0, 1, 13, 30, 0, 0),
     taskName: 'Write down some test data',
     description: 'test descrition',
     isDone: false,
@@ -11,8 +12,9 @@ const timeBasedTasks = [
   },
   {
     id: 2,
-    start: new Date(2020, 11, 22, 14, 30, 0, 0),
-    end: new Date(2020, 11, 22, 16, 30, 0, 0),
+    date: new Date(2021, 0, 1, 0, 0, 0, 0),
+    start: new Date(2021, 0, 1, 14, 30, 0, 0),
+    end: new Date(2021, 0, 1, 16, 30, 0, 0),
     description: null,
     taskName: 'Read a book',
     isDone: false,
@@ -20,8 +22,9 @@ const timeBasedTasks = [
   },
   {
     id: 3,
-    start: new Date(2020, 11, 23, 14, 30, 0, 0),
-    end: new Date(2020, 11, 23, 16, 30, 0, 0),
+    date: new Date(2021, 0, 3, 0, 0, 0, 0),
+    start: new Date(2021, 0, 3, 14, 30, 0, 0),
+    end: new Date(2021, 0, 3, 16, 30, 0, 0),
     description: null,
     taskName: 'Read a book',
     isDone: false,
@@ -31,6 +34,7 @@ const timeBasedTasks = [
 const miscTasks = [
   {
     id: 1,
+    date: new Date(2021, 0, 1, 0, 0, 0, 0),
     taskName: 'Clean up',
     description: 'test description',
     isDone: true,
@@ -38,6 +42,7 @@ const miscTasks = [
   },
   {
     id: 2,
+    date: new Date(2021, 0, 3, 0, 0, 0, 0),
     taskName: 'Brush your teeth',
     description: null,
     isDone: false,
@@ -48,38 +53,14 @@ const miscTasks = [
 const days = [
   {
     id: 20,
-    day: 22,
-    month: 11,
-    year: 2020,
-    timeBasedTasks: [],
-    miscTasks: [],
+    date: new Date(2021, 0, 1, 0, 0, 0, 0),
     basicNotes: 'today was a good day',
-    stats: {
-      mood: 5,
-      energy: 5,
-      motivation: 5,
-      wokeUp: new Date(2020, 11, 22, 8, 0, 0, 0),
-      wentToSleep: new Date(2020, 11, 22, 23, 0, 0, 0),
-      sleepTime: 32400000,
-    },
     isFinished: true,
   },
   {
     id: 21,
-    day: 23,
-    month: 11,
-    year: 2020,
-    timeBasedTasks: [],
-    miscTasks: [],
+    date: new Date(2021, 0, 3, 0, 0, 0, 0),
     basicNotes: 'today was a normal day',
-    stats: {
-      mood: 3,
-      energy: 2,
-      motivation: 3,
-      wokeUp: new Date(2020, 11, 23, 8, 0, 0, 0),
-      wentToSleep: new Date(2020, 11, 23, 22, 0, 0, 0),
-      sleepTime: 32400000,
-    },
     isFinished: false,
   },
 ];

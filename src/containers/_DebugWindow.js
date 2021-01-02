@@ -15,27 +15,21 @@ export default class _DebugWindow extends Component {
   _generateData() {
     try {
       realm.write(() => {
-        /**
-         * https://realm.io/docs/javascript/latest/#writes
-         * https://stackoverflow.com/questions/38214973/how-to-add-a-nested-list-of-objects-in-realm-error-js-value-must-be-of-type-o
-         */
-        //First Main document
-        let day = realm.create('Day', _data.days[0]);
-        //Embeded documents
-        //Time based tasks
-        day.timeBasedTasks.push(_data.timeBasedTasks[0]);
-        day.timeBasedTasks.push(_data.timeBasedTasks[1]);
-        //Misc tasks
-        _data.miscTasks.forEach((obj) => {
-          day.miscTasks.push(obj);
+        //Generate days
+        _data.days.forEach((day) => {
+          realm.create('Day', day);
         });
 
-        //Second document
-        day = realm.create('Day', _data.days[1]);
-        day.timeBasedTasks.push(_data.timeBasedTasks[2]);
-        _data.miscTasks.forEach((obj) => {
-          day.miscTasks.push(obj);
+        //Generate time based tasks
+        _data.timeBasedTasks.forEach((task) => {
+          realm.create('TimeBasedTask', task);
         });
+
+        //Generate misc tasks
+        _data.miscTasks.forEach((task) => {
+          realm.create('MiscTask', task);
+        });
+
         console.log('Dev: Data generated');
       });
     } catch (err) {
@@ -45,9 +39,23 @@ export default class _DebugWindow extends Component {
   }
 
   _showData() {
-    let days = realm.objects('Day');
     console.log('Dev: Displaying data');
+
+    let days = realm.objects('Day');
+    console.log('Dev: Days:');
     console.log(JSON.stringify(days, null, 2));
+
+    let stats = realm.objects('DayStats');
+    console.log('Dev: DayStats:');
+    console.log(JSON.stringify(stats, null, 2));
+
+    let tbTasks = realm.objects('TimeBasedTask');
+    console.log('Dev: TimeBasedTasks:');
+    console.log(JSON.stringify(tbTasks, null, 2));
+
+    let miscTasks = realm.objects('MiscTask');
+    console.log('Dev: MiscTasks:');
+    console.log(JSON.stringify(miscTasks, null, 2));
   }
 
   _deleteData() {

@@ -58,10 +58,10 @@ export default class TaskEditWindow extends Component {
       // taskEndTime: null,
       // taskName: '',
       // taskDate: null,
-      taskStartTime: new Date(2021, 0, 1, 12, 0, 0, 0),
-      taskEndTime: new Date(2021, 0, 1, 14, 0, 0, 0),
+      taskStartTime: new Date(2021, 0, 2, 12, 0, 0, 0),
+      taskEndTime: new Date(2021, 0, 2, 14, 0, 0, 0),
       taskName: 'asd',
-      taskDate: new Date(2021, 0, 1, 0, 0, 0, 0),
+      taskDate: new Date(2021, 0, 2, 0, 0, 0, 0),
       taskDescription: null,
     };
     //in case we are editing existing task:

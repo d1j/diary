@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {ScrollView, Button} from 'react-native';
 import {Text} from 'react-native-elements';
 import Collapsible from 'react-native-collapsible';
+
 import _ from 'lodash';
 
 import CalendarButtonModal from '../components/CalendarButtonModal';
@@ -32,33 +33,26 @@ export default class DayScreen extends Component {
 
     // Gather data to store in state
     let _currentDay = new Date();
-    let _currentDayData = db.findDayByDate(_currentDay);
-
-    // If current day entry does not exist in DB, create new empty entry
-    if (_currentDayData === undefined) {
-      _currentDayData = db.addNewEmptyDayEntry(_currentDay);
-    }
-    // _currentDayData.timeBasedTasks.sort(
-    //   (a, b) => a.start.getTime() - b.start.getTime(),
-    // );
+    _currentDay.setHours(0, 0, 0, 0);
+    let _currentDayData = db.findDay(_currentDay);
 
     this.state = {
       _testTaskData: {
         id: 1,
-        start: new Date(2020, 11, 22, 12, 30, 0, 0),
-        end: new Date(2020, 11, 22, 13, 30, 0, 0),
+        date: new Date(2021, 0, 2, 0, 0, 0, 0),
+        start: new Date(2021, 0, 2, 12, 30, 0, 0),
+        end: new Date(2021, 0, 2, 13, 30, 0, 0),
         taskName: 'Write down some test data',
         taskDescription: 'yeet',
         taskIsTimeBased: true,
-        date: new Date(2020, 11, 23, 0, 0, 0, 0),
       },
-      currentDate: _currentDay, //specifies which day we are viewing on DayScreen
       id: _currentDayData.id,
-      timeBasedTasks: _currentDayData.timeBasedTasks, //TODO: keep timeBasedTasks sorted by start time
-      miscTasks: _currentDayData.miscTasks,
+      currentDate: _currentDay, //specifies which day we are viewing on DayScreen
       basicNotes: _currentDayData.basicNotes,
-      stats: _currentDayData.stats,
       isFinished: _currentDayData.isFinished,
+      timeBasedTasks: db.findTBDayTasks(_currentDay), //TODO: keep timeBasedTasks sorted by start time
+      miscTasks: db.findMiscDayTasks(_currentDay),
+      stats: db.findDayStats(_currentDay),
 
       isTBTSectionCollapsed: false,
       isMTSectionCollapsed: false,
@@ -77,20 +71,16 @@ export default class DayScreen extends Component {
   //-----------------------------------------------------
   setCurrentDate(newDate) {
     // Find new newDate data
-    let newCurrentDayData = db.findDayByDate(newDate);
+    let newCurrentDayData = db.findDay(newDate);
 
-    // If newDay entry does not exist in DB, create new empty entry
-    if (newCurrentDayData == undefined) {
-      newCurrentDayData = db.addNewEmptyDayEntry(newDate);
-    }
     this.setState({
       currentDate: newDate,
       id: newCurrentDayData.id,
-      timeBasedTasks: newCurrentDayData.timeBasedTasks,
-      miscTasks: newCurrentDayData.miscTasks,
-      basicNotes: newCurrentDayData.basicNotes,
-      stats: newCurrentDayData.stats,
       isFinished: newCurrentDayData.isFinished,
+      basicNotes: newCurrentDayData.basicNotes,
+      timeBasedTasks: db.findTBDayTasks(newDate),
+      miscTasks: db.findMiscDayTasks(newDate),
+      stats: db.findDayStats(newDate),
     });
   }
   //-----------------------------------------------------
@@ -129,79 +119,101 @@ export default class DayScreen extends Component {
    * } */
   //-----------------------------------------------------
   addNewTask(data) {
+    //Add new task to DB
     let newTask = {isDone: false, isFinished: false};
     if (data.taskIsTimeBased) {
-      //Add TBTask
+      //TBTask
       newTask = {
         ...newTask,
+        date: data.date,
         start: data.start,
         end: data.end,
         taskName: data.taskName,
         description: data.description,
       };
-      db.addNewTbTask(data.date, newTask);
-      newTask.id = db.getLastTbTaskId(data.date);
+      newTask.id = db.addNewTbTask(newTask);
     } else {
-      //add MiscTask
+      //MiscTask
       newTask = {
         ...newTask,
+        date: data.date,
         taskName: data.taskName,
         description: data.description,
       };
-      db.addNewMiscTask(data.date, newTask);
-      newTask.id = db.getLastMiscTaskId(data.date);
+      newTask.id = db.addNewMiscTask(newTask);
     }
+    //Check if added task should be added to the current day window
     let currentDate = new Date(this.state.currentDate.getTime());
+    let taskDate = new Date(data.date);
     currentDate.setHours(0, 0, 0, 0);
-    data.date.setHours(0, 0, 0, 0);
-    if (data.date.getTime() === currentDate.getTime()) {
-      //added taskdate matches currently selected date - taskSections need to be updated
+    taskDate.setHours(0, 0, 0, 0);
+
+    if (taskDate.getTime() === currentDate.getTime()) {
       if (data.taskIsTimeBased) {
         if (this.state.timeBasedTasks.length < 1) {
           this.setState({timeBasedTasks: [newTask]});
         } else {
-          let newArr = _.cloneDeep(this.state.timeBasedTasks);
-          newArr.push(newTask);
-          this.setState({timeBasedTasks: newArr});
+          this.setState({
+            timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
+          });
         }
       } else {
         if (this.state.miscTasks.length < 1) {
           this.setState({miscTasks: [newTask]});
         } else {
-          let newArr = _.cloneDeep(this.state.miscTasks);
-          newArr.push(newTask);
-          this.setState({miscTasks: newArr});
+          this.setState({
+            miscTasks: db.findMiscDayTasks(this.state.currentDate),
+          });
         }
       }
     }
+
+    // if (taskDate.getTime() === currentDate.getTime()) {
+    //   //added taskdate matches currently selected date - taskSections need to be updated
+    //   if (data.taskIsTimeBased) {
+    //     if (this.state.timeBasedTasks.length < 1) {
+    //       this.setState({timeBasedTasks: [newTask]});
+    //     } else {
+    //       let newArr = _.cloneDeep(this.state.timeBasedTasks);
+    //       newArr.push(newTask);
+    //       this.setState({timeBasedTasks: newArr});
+    //     }
+    //   } else {
+    //     if (this.state.miscTasks.length < 1) {
+    //       this.setState({miscTasks: [newTask]});
+    //     } else {
+    //       let newArr = _.cloneDeep(this.state.miscTasks);
+    //       newArr.push(newTask);
+    //       this.setState({miscTasks: newArr});
+    //     }
+    //   }
+    // }
   }
   //-----------------------------------------------------
 
   //Delete task (used to delete both misc and TB tasks)
-  deleteTask(date, taskId, isTaskTimebased) {
+  deleteTask(taskId, isTaskTimebased) {
     if (isTaskTimebased) {
       if (this.state.timeBasedTasks.length < 2) {
         //There is only a single task left in the list
         this.setState({timeBasedTasks: []});
       } else {
-        //There are more than one tasks left in the list
-        db.removeTbTask(date, taskId);
-        let newArr = _.cloneDeep(this.state.timeBasedTasks);
-        const index = newArr.map((obj) => obj.id).indexOf(taskId);
-        if (index > -1) newArr.splice(index, 1);
-        this.setState({timeBasedTasks: newArr});
+        //There are more than one task left in the list
+        db.removeTbTask(taskId);
+        this.setState({
+          timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
+        });
       }
     } else {
       if (this.state.miscTasks.length < 2) {
         //There is only a single task left in the list
         this.setState({miscTasks: []});
       } else {
-        //There are more than one tasks left in the list
+        //There are more than one task left in the list
         db.removeMiscTask(date, taskId);
-        let newArr = _.cloneDeep(this.state.miscTasks);
-        const index = newArr.map((obj) => obj.id).indexOf(taskId);
-        if (index > -1) newArr.splice(index, 1);
-        this.setState({miscTasks: newArr});
+        this.setState({
+          miscTasks: db.findMiscDayTasks(this.state.currentDate),
+        });
       }
     }
   }
@@ -254,12 +266,12 @@ export default class DayScreen extends Component {
         {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
           <Button title="Finish day" onPress={this.finishCurrentDay} />
         )}
-        {/* <Button
+        <Button
           title="Delete task"
           onPress={() => {
-            this.deleteTask(this.state.currentDate, 1, true);
+            this.deleteTask(this.state.timeBasedTasks[0].id, true);
           }}
-        /> */}
+        />
 
         <_DebugWindow />
       </ScrollView>

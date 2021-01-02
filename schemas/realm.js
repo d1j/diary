@@ -3,9 +3,10 @@ import Realm from 'realm';
 class TimeBasedTask extends Realm.Object {}
 TimeBasedTask.schema = {
   name: 'TimeBasedTask',
-  embedded: true,
+  primaryKey: 'id',
   properties: {
     id: {type: 'int'},
+    date: {type: 'date'},
     start: {type: 'date'},
     end: {type: 'date'},
     taskName: {type: 'string'},
@@ -18,9 +19,10 @@ TimeBasedTask.schema = {
 class MiscTask extends Realm.Object {}
 MiscTask.schema = {
   name: 'MiscTask',
-  embedded: true,
+  primaryKey: 'id',
   properties: {
     id: {type: 'int'},
+    date: {type: 'date'},
     taskName: {type: 'string'},
     description: {type: 'string', optional: true},
     isDone: {type: 'bool', default: false},
@@ -31,8 +33,10 @@ MiscTask.schema = {
 class DayStats extends Realm.Object {}
 DayStats.schema = {
   name: 'DayStats',
-  embedded: true,
+  primaryKey: 'id',
   properties: {
+    id: {type: 'int'},
+    date: {type: 'date'},
     mood: {type: 'float', min: 1, max: 5, optional: true},
     energy: {type: 'float', min: 1, max: 5, optional: true},
     motivation: {type: 'float', min: 1, max: 5, optional: true},
@@ -48,13 +52,8 @@ Day.schema = {
   primaryKey: 'id',
   properties: {
     id: {type: 'int'},
-    day: {type: 'int', min: 1, max: 31},
-    month: {type: 'int', min: 0, max: 11}, //!!!
-    year: {type: 'int'},
-    timeBasedTasks: {type: 'list', objectType: 'TimeBasedTask'},
-    miscTasks: {type: 'list', objectType: 'MiscTask'},
+    date: {type: 'date'},
     basicNotes: {type: 'string', optional: true},
-    stats: {type: 'DayStats'},
     isFinished: {type: 'bool', default: false},
   },
 };
@@ -90,7 +89,6 @@ Month.schema = {
     id: {type: 'int'},
     year: {type: 'int'},
     month: {type: 'int', min: 0, max: 11}, //!!!
-    days: {type: 'list', objectType: 'Day'},
     stats: {type: 'MonthStats'},
   },
 };
@@ -105,5 +103,5 @@ export default new Realm({
     MonthStats,
     Month,
   ],
-  deleteRealmIfMigrationNeeded: true,
+  deleteRealmIfMigrationNeeded: true, //TODO: remove in prod
 });
