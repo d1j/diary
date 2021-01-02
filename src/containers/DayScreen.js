@@ -8,7 +8,6 @@ import TaskSection from '../components/TaskSection';
 import NotesSection from '../components/NotesSection';
 import StatsSection from '../components/StatsSection';
 
-import TaskEditButtonModal from '../components/TaskEditButtonModal';
 import AddNewTaskButtonModal from '../components/AddNewTaskButtonModal';
 
 import _DebugWindow from './_DebugWindow';

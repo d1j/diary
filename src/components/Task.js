@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Text, View, Button} from 'react-native';
-import TaskEditButtonModal from './TaskEditButtonModal';
+import {Text, View, Button, TouchableOpacity} from 'react-native';
+import EditTaskModal from './EditTaskModal';
 
 /** TODO:
  * enter edit task window
@@ -12,7 +12,15 @@ export default class Task extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      isModalVisible: false,
+    };
+
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
+  toggleModal() {
+    this.setState({isModalVisible: !this.state.isModalVisible});
   }
 
   render() {
@@ -23,7 +31,7 @@ export default class Task extends Component {
     } else {
     }
     return (
-      <View style={{borderWidth: 2}}>
+      <TouchableOpacity style={{borderWidth: 2}} onLongPress={this.toggleModal}>
         <Button
           title="Finish"
           onPress={() => {
@@ -51,7 +59,9 @@ export default class Task extends Component {
         )}
         <Text>isDone: {this.props.taskData.isDone ? 'yes' : 'no'}</Text>
         <Text>isDeleted: {this.props.taskData.isDeleted ? 'yes' : 'no'}</Text>
-        <TaskEditButtonModal
+        <EditTaskModal
+          isVisible={this.state.isModalVisible}
+          toggleModal={this.toggleModal}
           data={this.props.taskData}
           setData={this.props.editTask}
         />
@@ -63,7 +73,7 @@ export default class Task extends Component {
               !this.props.taskData.isDeleted,
             );
           }}></Button>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

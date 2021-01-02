@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Button, TextInput} from 'react-native';
 import {Text} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const formatHoursMinutes = (date) => {
   if (date == null) return '--:--';
@@ -182,7 +183,7 @@ export default class TaskEditWindow extends Component {
 
   render() {
     return (
-      <View
+      <ScrollView
         style={{
           backgroundColor: 'white',
           flex: 1,
@@ -254,7 +255,7 @@ export default class TaskEditWindow extends Component {
           title={this.props.data ? 'Edit task' : 'Add new task'}
           onPress={this.submitData}></Button>
         <Button title="Cancel" onPress={this.props.toggleModal}></Button>
-      </View>
+      </ScrollView>
     );
   }
 }
