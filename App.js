@@ -11,23 +11,14 @@ import {Button} from 'react-native';
 
 import realm from './schemas/realm';
 
-// import AddNewTaskButton from './src/components/AddNewTaskWindow';
-// export default function App() {
-//   return (
-//     <View>
-//       <AddNewTaskButton></AddNewTaskButton>
-//     </View>
-//   );
-// }
-
 const test = false;
+const yeetDb = () => {
+  console.log('Dev: Data deleted');
+  Realm.deleteFile(realm);
+};
 
 const Tab = createBottomTabNavigator();
 export default function App() {
-  const yeetDb = () => {
-    console.log('Dev: Data deleted');
-    Realm.deleteFile(realm);
-  };
   if (test) {
     return (
       <View>

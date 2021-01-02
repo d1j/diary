@@ -24,10 +24,8 @@
   * Energy level scale
   * Motivation level scale
 * Finish day button
-* Add new task button
-* Edit Task component
-* Edit Stats component
-
+* `AddNewTaskButtonModal`
+* `TaskEditButtonModal`
 
 
 # Realm

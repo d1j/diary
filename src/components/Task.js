@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, Button} from 'react-native';
+import TaskEditButtonModal from './TaskEditButtonModal';
 
 /** TODO:
  * enter edit task window
@@ -23,6 +24,14 @@ export default class Task extends Component {
     }
     return (
       <View style={{borderWidth: 2}}>
+        <Button
+          title="Finish"
+          onPress={() => {
+            this.props.setDoneTask(
+              this.props.taskData.id,
+              !this.props.taskData.isDone,
+            );
+          }}></Button>
         <Text>Task name: {this.props.taskData.taskName}</Text>
         {/* Inline If with Logical && Operator below */}
         {this.props.taskData.description != null && (
@@ -40,9 +49,20 @@ export default class Task extends Component {
             {`${this.props.taskData.end.getHours()}:${this.props.taskData.end.getMinutes()}`}
           </Text>
         )}
-
         <Text>isDone: {this.props.taskData.isDone ? 'yes' : 'no'}</Text>
-        <Text>isDeleted: {this.props.taskData.isDone ? 'yes' : 'no'}</Text>
+        <Text>isDeleted: {this.props.taskData.isDeleted ? 'yes' : 'no'}</Text>
+        <TaskEditButtonModal
+          data={this.props.taskData}
+          setData={this.props.editTask}
+        />
+        <Button
+          title="Delete"
+          onPress={() => {
+            this.props.setDeleteTask(
+              this.props.taskData.id,
+              !this.props.taskData.isDeleted,
+            );
+          }}></Button>
       </View>
     );
   }

@@ -129,6 +129,18 @@ const removeMiscTask = (taskId) => {
   });
 };
 
+const editTbTask = (newData) => {
+  realm.write(() => {
+    realm.create('TimeBasedTask', newData, true);
+  });
+};
+
+const editMiscTask = (newData) => {
+  realm.write(() => {
+    realm.create('MiscTask', newData, true);
+  });
+};
+
 export default {
   addNewEmptyDayEntry,
   findDay,
@@ -141,4 +153,6 @@ export default {
   addNewMiscTask,
   removeTbTask,
   removeMiscTask,
+  editTbTask,
+  editMiscTask,
 };

@@ -25,7 +25,14 @@ export default class TimeBasedTaskSection extends Component {
       return (
         <View>
           {this.props.taskList.map((task, idx) => {
-            return <Task key={idx} taskData={task}></Task>;
+            return (
+              <Task
+                key={idx}
+                taskData={task}
+                editTask={this.props.editTask}
+                setDoneTask={this.props.setDoneTask}
+                setDeleteTask={this.props.setDeleteTask}></Task>
+            );
           })}
         </View>
       );

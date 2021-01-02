@@ -4,14 +4,14 @@ import Modal from 'react-native-modal';
 
 import TaskEditWindow from './TaskEditWindow';
 
-export default function EditTaskButtonModal(props) {
+export default function TaskEditButtonModal(props) {
   const [isModalVisible, setisModalVisible] = useState(false);
   const toggleModal = () => {
     setisModalVisible(!isModalVisible);
   };
   return (
     <View>
-      <Button title="Edit a task" onPress={toggleModal} />
+      <Button title="Edit task" onPress={toggleModal} />
       <Modal
         style={{backgroundColor: 'white', flex: 1}}
         isVisible={isModalVisible}

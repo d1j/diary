@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import {ScrollView, Button} from 'react-native';
+import {ScrollView, Button, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import Collapsible from 'react-native-collapsible';
-
-import _ from 'lodash';
 
 import CalendarButtonModal from '../components/CalendarButtonModal';
 import TaskSection from '../components/TaskSection';
@@ -63,7 +61,6 @@ export default class DayScreen extends Component {
     this.setCurrentDate = this.setCurrentDate.bind(this);
     this.finishCurrentDay = this.finishCurrentDay.bind(this);
     this.addNewTask = this.addNewTask.bind(this);
-    this.deleteTask = this.deleteTask.bind(this);
     this.editTask = this.editTask.bind(this);
   }
 
@@ -167,60 +164,89 @@ export default class DayScreen extends Component {
         }
       }
     }
-
-    // if (taskDate.getTime() === currentDate.getTime()) {
-    //   //added taskdate matches currently selected date - taskSections need to be updated
-    //   if (data.taskIsTimeBased) {
-    //     if (this.state.timeBasedTasks.length < 1) {
-    //       this.setState({timeBasedTasks: [newTask]});
-    //     } else {
-    //       let newArr = _.cloneDeep(this.state.timeBasedTasks);
-    //       newArr.push(newTask);
-    //       this.setState({timeBasedTasks: newArr});
-    //     }
-    //   } else {
-    //     if (this.state.miscTasks.length < 1) {
-    //       this.setState({miscTasks: [newTask]});
-    //     } else {
-    //       let newArr = _.cloneDeep(this.state.miscTasks);
-    //       newArr.push(newTask);
-    //       this.setState({miscTasks: newArr});
-    //     }
-    //   }
-    // }
   }
   //-----------------------------------------------------
 
-  //Delete task (used to delete both misc and TB tasks)
-  deleteTask(taskId, isTaskTimebased) {
-    if (isTaskTimebased) {
-      if (this.state.timeBasedTasks.length < 2) {
-        //There is only a single task left in the list
-        this.setState({timeBasedTasks: []});
-      } else {
-        //There are more than one task left in the list
-        db.removeTbTask(taskId);
+  //Edit task (used to edit both misc and TB tasks)
+  /**example input:
+   *
+   * data = {
+   *  id: taskId,
+   *  taskIsTimeBased: true/false,
+   *  start: taskStartTime,
+   *  end: taskEndTime,
+   *  taskName: taskName,
+   *  description: taskDescription
+   *  date: taskDate
+   * } */
+  //-----------------------------------------------------
+  editTask(data) {
+    if (data.taskIsTimeBased) {
+      //Change to time-based task
+      if (data.initialTaskIsTimeBased) {
+        //Initial task is time-based
+        db.editTbTask(data);
         this.setState({
           timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
         });
+      } else {
+        //Initial task is miscellaneous
+        db.removeMiscTask(data.id);
+        db.addNewTbTask(data);
+        this.setState({
+          timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
+          miscTasks: db.findMiscDayTasks(this.state.currentDate),
+        });
       }
     } else {
-      if (this.state.miscTasks.length < 2) {
-        //There is only a single task left in the list
-        this.setState({miscTasks: []});
+      //Change to misc task
+      if (data.initialTaskIsTimeBased) {
+        //Initial task is time-based
+        db.removeTbTask(data.id);
+        db.addNewMiscTask(data);
+        this.setState({
+          timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
+          miscTasks: db.findMiscDayTasks(this.state.currentDate),
+        });
       } else {
-        //There are more than one task left in the list
-        db.removeMiscTask(date, taskId);
+        //Initial taks is misc
+        db.editMiscTask(data);
         this.setState({
           miscTasks: db.findMiscDayTasks(this.state.currentDate),
         });
       }
     }
   }
+  //-----------------------------------------------------
 
-  editTask(date, taskId, newData) {
-    //TODO
+  //Task.isDone/Task.isDeleted setters
+  //-----------------------------------------------------
+  setDoneTbTask(taskId, value) {
+    db.editTbTask({isDone: value, id: taskId});
+    this.setState({
+      timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
+    });
   }
+
+  setDoneMiscTask(taskId, value) {
+    db.editMiscTask({isDone: value, id: taskId});
+    this.setState({
+      miscTasks: db.findMiscDayTasks(this.state.currentDate),
+    });
+  }
+  setDeleteTbTask(taskId, value) {
+    db.editTbTask({isDeleted: value, id: taskId});
+    this.setState({
+      timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
+    });
+  }
+  setDeleteMiscTask(taskId, value) {
+    db.editMiscTask({isDeleted: value, id: taskId});
+    this.setState({
+      miscTasks: db.findMiscDayTasks(this.state.currentDate),
+    });
+  }
+  //-----------------------------------------------------
 
   render() {
     return (
@@ -233,13 +259,23 @@ export default class DayScreen extends Component {
         {/* This could be a button that collapses/expands the section */}
         <Text h3>Time based tasks</Text>
         <Collapsible collapsed={this.state.isTBTSectionCollapsed}>
-          <TaskSection taskList={this.state.timeBasedTasks} />
+          <TaskSection
+            taskList={this.state.timeBasedTasks}
+            setDoneTask={this.setDoneTbTask.bind(this)}
+            setDeleteTask={this.setDeleteTbTask.bind(this)}
+            editTask={this.editTask}
+          />
         </Collapsible>
 
         {/* This could be a button that collapses/expands the section */}
         <Text h3>Miscellaneous tasks</Text>
         <Collapsible collapsed={this.state.isMTSectionCollapsed}>
-          <TaskSection taskList={this.state.miscTasks} />
+          <TaskSection
+            taskList={this.state.miscTasks}
+            setDoneTask={this.setDoneMiscTask.bind(this)}
+            setDeleteTask={this.setDeleteMiscTask.bind(this)}
+            editTask={this.editTask}
+          />
         </Collapsible>
 
         {/* This could be a button that collapses/expands the section */}
@@ -252,6 +288,7 @@ export default class DayScreen extends Component {
           />
         </Collapsible>
 
+        {/* This could be a button that collapses/expands the section */}
         {this.state.isFinished && <Text h3>Stats</Text>}
         {this.state.isFinished && (
           <Collapsible collapsed={this.state.isStatusSectionCollapsed}>
@@ -260,18 +297,15 @@ export default class DayScreen extends Component {
         )}
 
         {!this.state.isFinished && (
-          <AddNewTaskButtonModal setData={this.addNewTask} />
+          <AddNewTaskButtonModal
+            currentDate={this.state.currentDate}
+            setData={this.addNewTask}
+          />
         )}
 
         {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
           <Button title="Finish day" onPress={this.finishCurrentDay} />
         )}
-        <Button
-          title="Delete task"
-          onPress={() => {
-            this.deleteTask(this.state.timeBasedTasks[0].id, true);
-          }}
-        />
 
         <_DebugWindow />
       </ScrollView>

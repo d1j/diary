@@ -13,13 +13,16 @@ export default function AddNewTaskButtonModal(props) {
     <View>
       <Button title="Add new task" onPress={toggleModal} />
       <Modal
-        style={{backgroundColor: 'white', flex: 1}}
         isVisible={isModalVisible}
         onBackdropPress={() => setisModalVisible(false)}
         onBackButtonPress={() => setisModalVisible(false)}
         animationIn="slideInDown"
         animationOut="slideOutUp">
-        <TaskEditWindow setData={props.setData} toggleModal={toggleModal} />
+        <TaskEditWindow
+          currentDate={props.currentDate}
+          setData={props.setData}
+          toggleModal={toggleModal}
+        />
       </Modal>
     </View>
   );
