@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TextInput, View} from 'react-native';
+import {TextInput, TouchableOpacity, Button, View} from 'react-native';
 
 export default class NotesSection extends Component {
   constructor(props) {

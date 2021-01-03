@@ -33,13 +33,13 @@ export default class Task extends Component {
     return (
       <TouchableOpacity style={{borderWidth: 2}} onLongPress={this.toggleModal}>
         <Button
-          title="Finish"
-          onPress={() => {
-            this.props.setDoneTask(
-              this.props.taskData.id,
-              !this.props.taskData.isDone,
-            );
-          }}></Button>
+    title="Finish"
+    onPress={() => {
+        this.props.setDoneTask(
+            this.props.taskData.id,
+            !this.props.taskData.isDone,
+        );
+    }}/>
         <Text>Task name: {this.props.taskData.taskName}</Text>
         {/* Inline If with Logical && Operator below */}
         {this.props.taskData.description != null && (

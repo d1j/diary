@@ -29,6 +29,7 @@ export default function App() {
     return (
       <NavigationContainer>
         <Tab.Navigator
+          tabBarPosition={'bottom'}
           screenOptions={({route}) => ({
             tabBarIcon: ({focused, color, size}) => {
               let iconName;
@@ -38,15 +39,16 @@ export default function App() {
               } else if (route.name === 'Stats') {
                 iconName = focused ? 'stats-chart' : 'stats-chart-outline';
               } else if (route.name === 'Month') {
-                iconName = focused ? 'bar-chart' : 'bar-chart-outline';
+                iconName = focused ? 'calendar' : 'calendar-outline';
               }
 
               return <Ionicons name={iconName} size={size} color={color} />;
             },
           })}
           tabBarOptions={{
-            activeTintColor: 'tomato',
+            activeTintColor: '#007AFF',
             inactiveTintColor: 'gray',
+            keyboardHidesTabBar:true,
             //showLabel: false,
           }}>
           <Tab.Screen name="Day" component={DayScreen} />

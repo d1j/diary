@@ -24,6 +24,8 @@ const isDateInFuture = (date) => {
   return false;
 };
 
+
+
 export default class DayScreen extends Component {
   constructor(props) {
     super(props);
@@ -256,7 +258,7 @@ export default class DayScreen extends Component {
         />
 
         {/* This could be a button that collapses/expands the section */}
-        <Text h3>Time based tasks</Text>
+        <Text style={{color:'#007AFF', fontSize:28, fontWeight:'bold'}}>Time based tasks</Text>
         <Collapsible collapsed={this.state.isTBTSectionCollapsed}>
           <TaskSection
             taskList={this.state.timeBasedTasks}
@@ -267,7 +269,7 @@ export default class DayScreen extends Component {
         </Collapsible>
 
         {/* This could be a button that collapses/expands the section */}
-        <Text h3>Miscellaneous tasks</Text>
+        <Text style={{color:'#007AFF', fontSize:28, fontWeight:'bold'}}>Miscellaneous tasks</Text>
         <Collapsible collapsed={this.state.isMTSectionCollapsed}>
           <TaskSection
             taskList={this.state.miscTasks}
@@ -278,7 +280,7 @@ export default class DayScreen extends Component {
         </Collapsible>
 
         {/* This could be a button that collapses/expands the section */}
-        <Text h3>Notes</Text>
+        <Text style={{color:'#007AFF', fontSize:28, fontWeight:'bold'}}>Notes</Text>
         <Collapsible collapsed={this.state.isNotesSectionCollapsed}>
           <NotesSection
             saveNewNotes={this.saveNewNotes.bind(this)}
@@ -295,18 +297,18 @@ export default class DayScreen extends Component {
           </Collapsible>
         )}
 
-        {!this.state.isFinished && (
-          <AddNewTaskButtonModal
-            currentDate={this.state.currentDate}
-            setData={this.addNewTask}
-          />
-        )}
-
         {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
           <Button title="Finish day" onPress={this.finishCurrentDay} />
         )}
 
         <_DebugWindow />
+
+          {!this.state.isFinished && (
+          <AddNewTaskButtonModal
+            currentDate={this.state.currentDate}
+            setData={this.addNewTask}
+          />
+        )}
       </ScrollView>
     );
   }

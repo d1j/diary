@@ -4,15 +4,20 @@ import Modal from 'react-native-modal';
 
 import TaskEditWindow from './TaskEditWindow';
 
-export default function TaskEditModal(props) {
+export default function EditTaskModal(props) {
   return (
     <Modal
-      style={{backgroundColor: 'white', flex: 1}}
+      style={{backgroundColor: 'yellow',
+          flex: 1, margin: 0,marginTop:180, paddingTop:0, borderTopRightRadius:30, borderTopLeftRadius:30,}}
       isVisible={props.isVisible}
-      onBackdropPress={props.toggleModal}
+      avoidKeyboard={false}
+      swipeDirection="down"
+      onSwipeComplete={props.toggleModal}
       onBackButtonPress={props.toggleModal}
-      animationIn="slideInDown"
-      animationOut="slideOutUp">
+      onBackdropPress={props.toggleModal}
+      animationIn="slideInUp"
+      animationOut="slideOutDown"
+      backdropTransitionInTiming={1000}>
       <TaskEditWindow
         setData={props.setData}
         data={props.data}
