@@ -24,7 +24,7 @@ export default class DayScreen extends Component {
     let _currentDay = new Date();
     _currentDay.setHours(0, 0, 0, 0);
     let _currentDayData = db.findDay(_currentDay);
-
+    //
     this.state = {
       _testTaskData: {
         id: 1,
