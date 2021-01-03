@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, View} from 'react-native';
 import realm from '../../schemas/realm';
+
 const _data = require('../../schemas/data');
 
 export default class _DebugWindow extends Component {

@@ -14,15 +14,7 @@ import _DebugWindow from './_DebugWindow';
 
 import db from '../../schemas/manageRealm';
 
-const isDateInFuture = (date) => {
-  let currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
-  date.setHours(0, 0, 0, 0);
-  if (currentDate.getTime() < date.getTime()) {
-    return true;
-  }
-  return false;
-};
+const isDateInFuture = require('../../helpers/func').isDateInFuture;
 
 export default class DayScreen extends Component {
   constructor(props) {
@@ -47,7 +39,7 @@ export default class DayScreen extends Component {
       currentDate: _currentDay, //specifies which day we are viewing on DayScreen
       basicNotes: _currentDayData.basicNotes,
       isFinished: _currentDayData.isFinished,
-      timeBasedTasks: db.findTBDayTasks(_currentDay), //TODO: keep timeBasedTasks sorted by start time
+      timeBasedTasks: db.findTBDayTasks(_currentDay),
       miscTasks: db.findMiscDayTasks(_currentDay),
       stats: db.findDayStats(_currentDay),
 
@@ -61,6 +53,7 @@ export default class DayScreen extends Component {
     this.finishCurrentDay = this.finishCurrentDay.bind(this);
     this.addNewTask = this.addNewTask.bind(this);
     this.editTask = this.editTask.bind(this);
+    this.setStats = this.setStats.bind(this);
   }
 
   //Calendar
@@ -247,6 +240,16 @@ export default class DayScreen extends Component {
   }
   //-----------------------------------------------------
 
+  //Set day statistics
+  //-----------------------------------------------------
+  setStats(data) {
+    db.editStats(data);
+    this.setState({
+      stats: db.findDayStats(this.state.currentDate),
+    });
+  }
+  //-----------------------------------------------------
+
   render() {
     return (
       <ScrollView style={{flex: 1}}>
@@ -256,7 +259,15 @@ export default class DayScreen extends Component {
         />
 
         {/* This could be a button that collapses/expands the section */}
-        <Text h3>Time based tasks</Text>
+        <Text
+          h3
+          onPress={() => {
+            this.setState({
+              isTBTSectionCollapsed: !this.state.isTBTSectionCollapsed,
+            });
+          }}>
+          Time based tasks
+        </Text>
         <Collapsible collapsed={this.state.isTBTSectionCollapsed}>
           <TaskSection
             taskList={this.state.timeBasedTasks}
@@ -267,7 +278,15 @@ export default class DayScreen extends Component {
         </Collapsible>
 
         {/* This could be a button that collapses/expands the section */}
-        <Text h3>Miscellaneous tasks</Text>
+        <Text
+          h3
+          onPress={() => {
+            this.setState({
+              isMTSectionCollapsed: !this.state.isMTSectionCollapsed,
+            });
+          }}>
+          Miscellaneous tasks
+        </Text>
         <Collapsible collapsed={this.state.isMTSectionCollapsed}>
           <TaskSection
             taskList={this.state.miscTasks}
@@ -278,7 +297,15 @@ export default class DayScreen extends Component {
         </Collapsible>
 
         {/* This could be a button that collapses/expands the section */}
-        <Text h3>Notes</Text>
+        <Text
+          h3
+          onPress={() => {
+            this.setState({
+              isNotesSectionCollapsed: !this.state.isNotesSectionCollapsed,
+            });
+          }}>
+          Notes
+        </Text>
         <Collapsible collapsed={this.state.isNotesSectionCollapsed}>
           <NotesSection
             saveNewNotes={this.saveNewNotes.bind(this)}
@@ -288,10 +315,24 @@ export default class DayScreen extends Component {
         </Collapsible>
 
         {/* This could be a button that collapses/expands the section */}
-        {this.state.isFinished && <Text h3>Stats</Text>}
+        {this.state.isFinished && (
+          <Text
+            h3
+            onPress={() => {
+              this.setState({
+                isStatusSectionCollapsed: !this.state.isStatusSectionCollapsed,
+              });
+            }}>
+            Stats
+          </Text>
+        )}
         {this.state.isFinished && (
           <Collapsible collapsed={this.state.isStatusSectionCollapsed}>
-            <StatsSection stats={this.state.stats} />
+            <StatsSection
+              stats={this.state.stats}
+              currentDate={this.state.currentDate}
+              setStats={this.setStats}
+            />
           </Collapsible>
         )}
 

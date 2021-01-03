@@ -2,11 +2,7 @@ import React, {Component} from 'react';
 import {Text, View, Button, TouchableOpacity} from 'react-native';
 import EditTaskModal from './EditTaskModal';
 
-/** TODO:
- * enter edit task window
- * finish task
- * delete task
- *  */
+const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
 
 export default class Task extends Component {
   constructor(props) {
@@ -47,15 +43,11 @@ export default class Task extends Component {
         )}
         {this.props.taskData.start != undefined && (
           <Text>
-            Start time:{' '}
-            {`${this.props.taskData.start.getHours()}:${this.props.taskData.start.getMinutes()}`}
+            Start time: {formatHoursMinutes(this.props.taskData.start)}
           </Text>
         )}
         {this.props.taskData.end != undefined && (
-          <Text>
-            End time:{' '}
-            {`${this.props.taskData.end.getHours()}:${this.props.taskData.end.getMinutes()}`}
-          </Text>
+          <Text>End time: {formatHoursMinutes(this.props.taskData.end)}</Text>
         )}
         <Text>isDone: {this.props.taskData.isDone ? 'yes' : 'no'}</Text>
         <Text>isDeleted: {this.props.taskData.isDeleted ? 'yes' : 'no'}</Text>

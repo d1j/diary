@@ -47,7 +47,8 @@ const findDay = (date) => {
 const findTBDayTasks = (date) => {
   let tasks = realm
     .objects('TimeBasedTask')
-    .filtered(...realmFilters.dayInterval(date));
+    .filtered(...realmFilters.dayInterval(date))
+    .sorted('start');
   return tasks;
 };
 
@@ -141,6 +142,13 @@ const editMiscTask = (newData) => {
   });
 };
 
+const editStats = (newData) => {
+  //TODO: calculate sleepTime
+  realm.write(() => {
+    realm.create('DayStats', newData, true);
+  });
+};
+
 export default {
   addNewEmptyDayEntry,
   findDay,
@@ -155,4 +163,5 @@ export default {
   removeMiscTask,
   editTbTask,
   editMiscTask,
+  editStats,
 };

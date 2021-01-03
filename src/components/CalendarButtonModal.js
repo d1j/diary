@@ -3,12 +3,7 @@ import {View, Button} from 'react-native';
 import {CalendarList} from 'react-native-calendars';
 import Modal from 'react-native-modal';
 
-//Takes in Date object and returns the date in the following format `2022-12-29`;
-function toHumanDateFormat(date) {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${
-    date.getDate() / 10 < 1 ? '0' + date.getDate() : date.getDate()
-  }`;
-}
+const formatDate = require('../../helpers/func').formatDateWithDashes;
 
 //TODO: marked dates
 
@@ -16,14 +11,14 @@ export default function CalendarButtonModal(props) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [markedDates, setMarkedDate] = useState({
     //['2020-11-04']: {
-    [toHumanDateFormat(new Date())]: {
+    [formatDate(new Date())]: {
       marked: true,
     },
   });
 
   const changeMarkedDate = (newDate) => {
     setMarkedDate({
-      [toHumanDateFormat(newDate)]: {
+      [formatDate(newDate)]: {
         marked: true,
       },
     });
@@ -32,7 +27,7 @@ export default function CalendarButtonModal(props) {
   const addMarkedDate = (newDate) => {
     setMarkedDate({
       ...markedDates,
-      [toHumanDateFormat(newDate)]: {
+      [formatDate(newDate)]: {
         marked: true,
       },
     });

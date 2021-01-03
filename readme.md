@@ -7,6 +7,9 @@
   * Ikonu lib'a reikejo sulink'int https://reactnative.dev/docs/linking-libraries-ios
 * Collapse: https://github.com/oblador/react-native-collapsible
 * DateTimePicker: https://www.npmjs.com/package/@react-native-community/datetimepicker#onchange-optional
+* Rating: https://github.com/Monte9/react-native-ratings
+https://github.com/Monte9/react-native-ratings/issues/131
+* 
 
 # Components
 
@@ -45,10 +48,8 @@ Cheatsheet: https://www.automatetheplanet.com/adb-cheat-sheet/
 # react native snippets
 
 `rconst` - constructor with state
-`rnc` - react native class
+`rnc` - react native class component
+`rnf` - react native function component
 `bnd` - method bind
-
-# pakalbeti apie:
-
-# random
-
+`state` - this.state.
+`sst` - this.setState({})

@@ -9,22 +9,16 @@ import StatsScreen from './src/containers/StatsScreen';
 import {View} from 'react-native';
 import {Button} from 'react-native';
 
-import realm from './schemas/realm';
-
 const test = false;
-const yeetDb = () => {
-  console.log('Dev: Data deleted');
-  Realm.deleteFile(realm);
-};
 
 const Tab = createBottomTabNavigator();
 export default function App() {
   if (test) {
     return (
       <View>
-        <Button title="yeet DB" onPress={yeetDb}></Button>
+        <Text>Test View</Text>
       </View>
-    );
+    ); //TODO: Remove in prod
   } else {
     return (
       <NavigationContainer>

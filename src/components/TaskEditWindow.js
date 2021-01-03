@@ -4,23 +4,8 @@ import {Text} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const formatHoursMinutes = (date) => {
-  if (date == null) return '--:--';
-  return `${
-    date.getHours() / 10 < 1 ? '0' + date.getHours() : date.getHours()
-  }:${
-    date.getMinutes() / 10 < 1 ? '0' + date.getMinutes() : date.getMinutes()
-  }`;
-};
-
-const formatDate = (date) => {
-  if (date == null) return 'YYYY-MM-DD';
-  return `${date.getFullYear()}-${
-    (date.getMonth() + 1) / 10 < 1
-      ? '0' + (date.getMonth() + 1)
-      : date.getMonth() + 1
-  }-${date.getDate() / 10 < 1 ? '0' + date.getDate() : date.getDate()}`;
-};
+const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
+const formatDate = require('../../helpers/func').formatDateWithDashes;
 
 /** If you are using this component to update task, provide the following prop:
  * prop.data = {
@@ -99,9 +84,7 @@ export default class TaskEditWindow extends Component {
       showDatePicker: !this.state.showDatePicker,
     });
   }
-  //TODO: check if valid start/end times are set
   changeStartTime(event, date) {
-    //event types: set/dismissed
     this.setState({showStartTimePicker: false});
     if (event.type === 'set') this.setState({taskStartTime: date});
     else if (event.type === 'dismissed') this.setState({taskStartTime: null});
