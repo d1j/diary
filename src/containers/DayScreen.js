@@ -260,7 +260,7 @@ export default class DayScreen extends Component {
 
         {/* This could be a button that collapses/expands the section */}
         <Text
-          h3
+          style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
           onPress={() => {
             this.setState({
               isTBTSectionCollapsed: !this.state.isTBTSectionCollapsed,
@@ -279,7 +279,7 @@ export default class DayScreen extends Component {
 
         {/* This could be a button that collapses/expands the section */}
         <Text
-          h3
+          style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
           onPress={() => {
             this.setState({
               isMTSectionCollapsed: !this.state.isMTSectionCollapsed,
@@ -298,7 +298,7 @@ export default class DayScreen extends Component {
 
         {/* This could be a button that collapses/expands the section */}
         <Text
-          h3
+          style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
           onPress={() => {
             this.setState({
               isNotesSectionCollapsed: !this.state.isNotesSectionCollapsed,
@@ -336,18 +336,18 @@ export default class DayScreen extends Component {
           </Collapsible>
         )}
 
+        {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
+          <Button title="Finish day" onPress={this.finishCurrentDay} />
+        )}
+
+        <_DebugWindow />
+
         {!this.state.isFinished && (
           <AddNewTaskButtonModal
             currentDate={this.state.currentDate}
             setData={this.addNewTask}
           />
         )}
-
-        {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
-          <Button title="Finish day" onPress={this.finishCurrentDay} />
-        )}
-
-        <_DebugWindow />
       </ScrollView>
     );
   }
