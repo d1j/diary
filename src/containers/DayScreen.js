@@ -252,103 +252,106 @@ export default class DayScreen extends Component {
 
   render() {
     return (
-      <ScrollView style={{flex: 1}}>
-        <CalendarButtonModal
-          currentDate={this.state.currentDate}
-          setCurrentDate={this.setCurrentDate}
-        />
-
-        {/* This could be a button that collapses/expands the section */}
-        <Text
-          style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
-          onPress={() => {
-            this.setState({
-              isTBTSectionCollapsed: !this.state.isTBTSectionCollapsed,
-            });
-          }}>
-          Time based tasks
-        </Text>
-        <Collapsible collapsed={this.state.isTBTSectionCollapsed}>
-          <TaskSection
-            taskList={this.state.timeBasedTasks}
-            setDoneTask={this.setDoneTbTask.bind(this)}
-            setDeleteTask={this.setDeleteTbTask.bind(this)}
-            editTask={this.editTask}
+      <View style={{flex: 1}}>
+        <ScrollView style={{flex: 1}}>
+          <CalendarButtonModal
+            currentDate={this.state.currentDate}
+            setCurrentDate={this.setCurrentDate}
           />
-        </Collapsible>
 
-        {/* This could be a button that collapses/expands the section */}
-        <Text
-          style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
-          onPress={() => {
-            this.setState({
-              isMTSectionCollapsed: !this.state.isMTSectionCollapsed,
-            });
-          }}>
-          Miscellaneous tasks
-        </Text>
-        <Collapsible collapsed={this.state.isMTSectionCollapsed}>
-          <TaskSection
-            taskList={this.state.miscTasks}
-            setDoneTask={this.setDoneMiscTask.bind(this)}
-            setDeleteTask={this.setDeleteMiscTask.bind(this)}
-            editTask={this.editTask}
-          />
-        </Collapsible>
-
-        {/* This could be a button that collapses/expands the section */}
-        <Text
-          style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
-          onPress={() => {
-            this.setState({
-              isNotesSectionCollapsed: !this.state.isNotesSectionCollapsed,
-            });
-          }}>
-          Notes
-        </Text>
-        <Collapsible collapsed={this.state.isNotesSectionCollapsed}>
-          <NotesSection
-            saveNewNotes={this.saveNewNotes.bind(this)}
-            saveNotesToDb={this.saveNotesToDb.bind(this)}
-            notesData={this.state.basicNotes}
-          />
-        </Collapsible>
-
-        {/* This could be a button that collapses/expands the section */}
-        {this.state.isFinished && (
+          {/* This could be a button that collapses/expands the section */}
           <Text
-            h3
+            style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
             onPress={() => {
               this.setState({
-                isStatusSectionCollapsed: !this.state.isStatusSectionCollapsed,
+                isTBTSectionCollapsed: !this.state.isTBTSectionCollapsed,
               });
             }}>
-            Stats
+            Time based tasks
           </Text>
-        )}
-        {this.state.isFinished && (
-          <Collapsible collapsed={this.state.isStatusSectionCollapsed}>
-            <StatsSection
-              stats={this.state.stats}
-              currentDate={this.state.currentDate}
-              setStats={this.setStats}
+          <Collapsible collapsed={this.state.isTBTSectionCollapsed}>
+            <TaskSection
+              taskList={this.state.timeBasedTasks}
+              setDoneTask={this.setDoneTbTask.bind(this)}
+              setDeleteTask={this.setDeleteTbTask.bind(this)}
+              editTask={this.editTask}
             />
           </Collapsible>
-        )}
 
-        {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
-          <Button title="Finish day" onPress={this.finishCurrentDay} />
-        )}
+          {/* This could be a button that collapses/expands the section */}
+          <Text
+            style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
+            onPress={() => {
+              this.setState({
+                isMTSectionCollapsed: !this.state.isMTSectionCollapsed,
+              });
+            }}>
+            Miscellaneous tasks
+          </Text>
+          <Collapsible collapsed={this.state.isMTSectionCollapsed}>
+            <TaskSection
+              taskList={this.state.miscTasks}
+              setDoneTask={this.setDoneMiscTask.bind(this)}
+              setDeleteTask={this.setDeleteMiscTask.bind(this)}
+              editTask={this.editTask}
+            />
+          </Collapsible>
 
-        <_DebugWindow />
+          {/* This could be a button that collapses/expands the section */}
+          <Text
+            style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
+            onPress={() => {
+              this.setState({
+                isNotesSectionCollapsed: !this.state.isNotesSectionCollapsed,
+              });
+            }}>
+            Notes
+          </Text>
+          <Collapsible collapsed={this.state.isNotesSectionCollapsed}>
+            <NotesSection
+              saveNewNotes={this.saveNewNotes.bind(this)}
+              saveNotesToDb={this.saveNotesToDb.bind(this)}
+              notesData={this.state.basicNotes}
+            />
+          </Collapsible>
 
+          {/* This could be a button that collapses/expands the section */}
+          {this.state.isFinished && (
+            <Text
+              h3
+              onPress={() => {
+                this.setState({
+                  isStatusSectionCollapsed: !this.state
+                    .isStatusSectionCollapsed,
+                });
+              }}>
+              Stats
+            </Text>
+          )}
+          {this.state.isFinished && (
+            <Collapsible collapsed={this.state.isStatusSectionCollapsed}>
+              <StatsSection
+                stats={this.state.stats}
+                currentDate={this.state.currentDate}
+                setStats={this.setStats}
+              />
+            </Collapsible>
+          )}
+
+          {!this.state.isFinished &&
+            !isDateInFuture(this.state.currentDate) && (
+              <Button title="Finish day" onPress={this.finishCurrentDay} />
+            )}
+
+          <_DebugWindow />
+        </ScrollView>
         {!this.state.isFinished && (
           <AddNewTaskButtonModal
             currentDate={this.state.currentDate}
             setData={this.addNewTask}
           />
         )}
-      </ScrollView>
+      </View>
     );
   }
 }

@@ -21,7 +21,7 @@ export default function App() {
     ); //TODO: Remove in prod
   } else {
     return (
-      <NavigationContainer>
+      <NavigationContainer style={{flex: 1}}>
         <Tab.Navigator
           tabBarPosition={'bottom'}
           screenOptions={({route}) => ({
@@ -42,7 +42,7 @@ export default function App() {
           tabBarOptions={{
             activeTintColor: '#007AFF',
             inactiveTintColor: 'gray',
-            keyboardHidesTabBar:true,
+            keyboardHidesTabBar: true,
             //showLabel: false,
           }}>
           <Tab.Screen name="Day" component={DayScreen} />
