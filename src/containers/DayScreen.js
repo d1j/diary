@@ -365,28 +365,26 @@ export default class DayScreen extends Component {
             setData={this.addNewTask}
           />
         )}
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#2296F3',
-            width: 60,
-            height: 60,
-            borderRadius: 60,
-            elevation: 2,
-            flex: 1,
-            position: 'absolute',
-            left: 20,
-            bottom: 20,
-          }}>
-          {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
-            <TouchableOpacity
-              title="Finish day"
-              onPress={this.finishCurrentDay}>
-              <Ionicons name={'cloudy-night-outline'} color="white" size={30} />
-            </TouchableOpacity>
-          )}
-        </View>
+        {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#2296F3',
+              width: 60,
+              height: 60,
+              borderRadius: 60,
+              elevation: 2,
+              flex: 1,
+              position: 'absolute',
+              left: 20,
+              bottom: 20,
+            }}
+            title="Finish day"
+            onPress={this.finishCurrentDay}>
+            <Ionicons name={'cloudy-night-outline'} color="white" size={30} />
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
