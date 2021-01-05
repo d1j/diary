@@ -20,6 +20,7 @@ export default class NotesSection extends Component {
           }}
           multiline={true}
           placeholder="Text before input"
+          style={{paddingLeft: 10, paddingRight: 10}}
           value={this.props.notesData}></TextInput>
       </View>
     );
