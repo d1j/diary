@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, Button, View} from 'react-native';
+import {ScrollView, Button, View, TouchableOpacity} from 'react-native';
 import {Text} from 'react-native-elements';
 import Collapsible from 'react-native-collapsible';
 
@@ -13,6 +13,8 @@ import AddNewTaskButtonModal from '../components/AddNewTaskButtonModal';
 import _DebugWindow from './_DebugWindow';
 
 import db from '../../schemas/manageRealm';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const isDateInFuture = require('../../helpers/func').isDateInFuture;
 
@@ -261,7 +263,7 @@ export default class DayScreen extends Component {
 
           {/* This could be a button that collapses/expands the section */}
           <Text
-            style={{paddingLeft:10, color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
+            style={{paddingBottom:0,paddingLeft:10, color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
             onPress={() => {
               this.setState({
                 isTBTSectionCollapsed: !this.state.isTBTSectionCollapsed,
@@ -299,7 +301,7 @@ export default class DayScreen extends Component {
 
           {/* This could be a button that collapses/expands the section */}
           <Text
-            style={{paddingLeft:10,color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
+            style={{marginHorizontal:10,color: '#007AFF', fontSize: 28, fontWeight: 'bold', borderColor:'#6fa1e2',borderBottomWidth:2,}}
             onPress={() => {
               this.setState({
                 isNotesSectionCollapsed: !this.state.isNotesSectionCollapsed,
@@ -338,10 +340,7 @@ export default class DayScreen extends Component {
             </Collapsible>
           )}
 
-          {!this.state.isFinished &&
-            !isDateInFuture(this.state.currentDate) && (
-              <Button title="Finish day" onPress={this.finishCurrentDay} />
-            )}
+
 
           <_DebugWindow />
         </ScrollView>
@@ -351,6 +350,25 @@ export default class DayScreen extends Component {
             setData={this.addNewTask}
           />
         )}
+        <View style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#2296F3',
+          width: 60,
+          height: 60,
+          borderRadius: 60,
+          elevation: 2,
+                flex: 1,
+          position: 'absolute',
+          left: 20,
+          bottom: 20,
+           }} >{!this.state.isFinished &&
+            !isDateInFuture(this.state.currentDate) && (
+            <TouchableOpacity title="Finish day" onPress={this.finishCurrentDay}>
+              <Ionicons name={'cloudy-night-outline'} color='white' size={30}/>
+            </TouchableOpacity>
+            )}</View>
+
       </View>
     );
   }
