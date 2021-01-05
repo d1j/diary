@@ -7,7 +7,6 @@ import DayScreen from './src/containers/DayScreen';
 import MonthScreen from './src/containers/MonthScreen';
 import StatsScreen from './src/containers/StatsScreen';
 import {View} from 'react-native';
-import {Button} from 'react-native';
 
 const test = false;
 

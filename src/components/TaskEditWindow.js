@@ -4,8 +4,9 @@ import {Text} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
-const formatDate = require('../../helpers/func').formatDateWithDashes;
+const formatHoursMinutes = require('../../helper_funcs/func')
+  .formatHoursMinutes;
+const formatDate = require('../../helper_funcs/func').formatDateWithDashes;
 
 /** If you are using this component to update task, provide the following prop:
  * prop.data = {
@@ -170,9 +171,9 @@ export default class TaskEditWindow extends Component {
         style={{
           backgroundColor: 'white',
           flex: 1,
-          padding:10,
-          borderTopLeftRadius:30,
-          borderTopRightRadius:30
+          padding: 10,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
         }}>
         <Text h3>{this.props.data ? 'Edit task' : 'Add new task'}</Text>
         <Text>Task type</Text>
@@ -227,21 +228,24 @@ export default class TaskEditWindow extends Component {
         )}
         <Text>Task name</Text>
         <TextInput
-    onChangeText={(text) => {
-      this.setState({taskName: text});
-    }}
-    placeholder="Enter task name..."
-    value={this.state.taskName}/>
+          onChangeText={(text) => {
+            this.setState({taskName: text});
+          }}
+          placeholder="Enter task name..."
+          value={this.state.taskName}
+        />
         <Text>Task description</Text>
         <TextInput
-    placeholder="Enter task description..."
-    onChangeText={(text) => {
-      this.setState({taskDescription: text});
-    }}
-    value={this.state.taskDescription}/>
+          placeholder="Enter task description..."
+          onChangeText={(text) => {
+            this.setState({taskDescription: text});
+          }}
+          value={this.state.taskDescription}
+        />
         <Button
-    title={this.props.data ? 'Edit task' : 'Add new task'}
-    onPress={this.submitData}/>
+          title={this.props.data ? 'Edit task' : 'Add new task'}
+          onPress={this.submitData}
+        />
         <Button title="Cancel" onPress={this.props.toggleModal}></Button>
       </ScrollView>
     );

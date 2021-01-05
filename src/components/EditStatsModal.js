@@ -3,8 +3,9 @@ import {Text, AirbnbRating} from 'react-native-elements';
 import {View, Button} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
-const formatDate = require('../../helpers/func').formatDateWithDashes;
+const formatHoursMinutes = require('../../helper_funcs/func')
+  .formatHoursMinutes;
+const formatDate = require('../../helper_funcs/func').formatDateWithDashes;
 
 const RatingSection = (props) => {
   return (
@@ -88,7 +89,14 @@ export default class EditStatsModal extends Component {
     super(props);
 
     this.state = {
-      ...this.props.stats,
+      id: this.props.stats.id,
+      date: this.props.stats.date,
+      mood: this.props.stats.mood,
+      energy: this.props.stats.energy,
+      motivation: this.props.stats.motivation,
+      wokeUp: this.props.stats.wokeUp,
+      wentToSleep: this.props.stats.wentToSleep,
+      sleepTime: this.props.stats.sleepTime,
       currentDate: this.props.currentDate,
       showWentToTimePicker: false,
       wentToTimePickerMode: 'date',
@@ -154,7 +162,7 @@ export default class EditStatsModal extends Component {
         />
 
         <SelectDayAndTime
-          time={this.props.wokeUp}
+          time={this.state.wokeUp}
           title="Woke up:"
           submitData={(data) => {
             this.setState({wokeUp: data});
@@ -162,7 +170,7 @@ export default class EditStatsModal extends Component {
         />
 
         <SelectDayAndTime
-          time={this.props.wentToSleep}
+          time={this.state.wentToSleep}
           title="Went to sleep:"
           submitData={(data) => {
             this.setState({wentToSleep: data});

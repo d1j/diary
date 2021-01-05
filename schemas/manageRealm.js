@@ -1,4 +1,6 @@
 import realm from './realm';
+const formatDateWithDashes = require('../helper_funcs/func')
+  .formatDateWithDashes;
 
 const getDayDateInterval = (date) => {
   let start = new Date(date);
@@ -149,6 +151,24 @@ const editStats = (newData) => {
   });
 };
 
+const _getDecemberStats = () => {
+  let stats = realm
+    .objects('DayStats')
+    .filtered(
+      'date >= $0 && date < $1',
+      new Date(2020, 11, 1),
+      new Date(2021, 0, 1),
+    )
+    .sorted('date');
+
+  let arr = {labels: [], datasets: [{data: []}]};
+  stats.forEach((elem) => {
+    arr.labels.push(formatDateWithDashes(elem.date));
+    arr.datasets[0].data.push(elem.sleepTime / 3600000);
+  });
+  return arr;
+};
+
 export default {
   addNewEmptyDayEntry,
   findDay,
@@ -164,4 +184,5 @@ export default {
   editTbTask,
   editMiscTask,
   editStats,
+  _getDecemberStats,
 };

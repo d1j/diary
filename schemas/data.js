@@ -65,6 +65,19 @@ const days = [
   },
 ];
 
-const months = [];
+const monthStats = [
+  {
+    id: 1,
+    year: 2020,
+    month: 11,
+    days: [],
+    averageSleepTime: null,
+    averageMood: null,
+    averageMenergy: null,
+    averageMmotivation: null,
+  },
+];
 
-module.exports = {timeBasedTasks, miscTasks, days, months};
+const monthDayStats = [];
+
+module.exports = {timeBasedTasks, miscTasks, days, monthStats};

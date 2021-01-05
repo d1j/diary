@@ -14,7 +14,7 @@ import _DebugWindow from './_DebugWindow';
 
 import db from '../../schemas/manageRealm';
 
-const isDateInFuture = require('../../helpers/func').isDateInFuture;
+const isDateInFuture = require('../../helper_funcs/func').isDateInFuture;
 
 export default class DayScreen extends Component {
   constructor(props) {

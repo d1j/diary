@@ -4,7 +4,8 @@ import {TouchableOpacity, Text} from 'react-native';
 
 import EditStatsModal from './EditStatsModal';
 
-const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
+const formatHoursMinutes = require('../../helper_funcs/func')
+  .formatHoursMinutes;
 
 /**{
     "id": 2,

@@ -3,6 +3,7 @@ import {Button, View} from 'react-native';
 import realm from '../../schemas/realm';
 
 const _data = require('../../schemas/data');
+const genDayStats = require('../../schemas/generate').genDayStats;
 
 export default class _DebugWindow extends Component {
   constructor(props) {
@@ -29,6 +30,12 @@ export default class _DebugWindow extends Component {
         //Generate misc tasks
         _data.miscTasks.forEach((task) => {
           realm.create('MiscTask', task);
+        });
+
+        //Generate Day Stats
+        let statsData = genDayStats();
+        statsData.forEach((entry) => {
+          realm.create('DayStats', entry);
         });
 
         console.log('Dev: Data generated');

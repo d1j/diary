@@ -3,7 +3,7 @@ import {View, Button} from 'react-native';
 import {CalendarList} from 'react-native-calendars';
 import Modal from 'react-native-modal';
 
-const formatDate = require('../../helpers/func').formatDateWithDashes;
+const formatDate = require('../../helper_funcs/func').formatDateWithDashes;
 
 //TODO: marked dates
 
