@@ -28,7 +28,7 @@ export default function AddNewTaskButtonModal(props) {
           borderRadius: 60,
           elevation: 2,
         }}>
-        <Text style={{color:'white', fontSize:34}}>+</Text>
+        <Text style={{color: 'white', fontSize: 34}}>+</Text>
         <Modal
           style={{
             backgroundColor: 'white',
