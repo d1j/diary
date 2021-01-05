@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Text, View, Button, TouchableOpacity} from 'react-native';
+import {Text, Pressable, View, Button, TouchableOpacity} from 'react-native';
 import EditTaskModal from './EditTaskModal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import LogBoxButton from "react-native/Libraries/LogBox/UI/LogBoxButton";
 
 const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
 
@@ -19,6 +21,12 @@ export default class Task extends Component {
     this.setState({isModalVisible: !this.state.isModalVisible});
   }
 
+  determineColor(value){
+      let iconColor;
+      iconColor = (value) ? 'green':'red';
+      return iconColor;
+  }
+
   render() {
     if (this.props.taskData == undefined) {
       <View>
@@ -27,15 +35,26 @@ export default class Task extends Component {
     } else {
     }
     return (
-      <TouchableOpacity style={{borderWidth: 2}} onLongPress={this.toggleModal}>
-        <Button
+      <TouchableOpacity style={{justifyContent:'center'}} onLongPress={this.toggleModal}>
+       <Pressable
+        style={{
+          zIndex:1,
+          position:'absolute',
+          backgroundColor: '#e7e7de',
+          width: 50,
+          justifyContent:'center',
+          alignItems:'center',
+          height: 50,
+            right:5,
+          borderRadius: 100,
+          elevation: 2,}}
     title="Finish"
-    onPress={() => {
+    onPress={() => { console.log(this.determineColor())
         this.props.setDoneTask(
             this.props.taskData.id,
             !this.props.taskData.isDone,
         );
-    }}/>
+    }}><Ionicons name={'checkmark-done-sharp'} color={this.determineColor(this.props.taskData.isDone)} size={40}/></Pressable>
         <Text>Task name: {this.props.taskData.taskName}</Text>
         {/* Inline If with Logical && Operator below */}
         {this.props.taskData.description != null && (
@@ -57,14 +76,25 @@ export default class Task extends Component {
           data={this.props.taskData}
           setData={this.props.editTask}
         />
-        <Button
+        <Pressable
           title="Delete"
+          style={{zIndex:1,
+          position:'absolute',
+          backgroundColor: '#e7e7de',
+          justifyContent:'center',
+          alignItems:'center',
+          width: 50,
+          height: 50,
+              right:60,
+          borderRadius: 100,
+          elevation: 2,}}
+
           onPress={() => {
             this.props.setDeleteTask(
               this.props.taskData.id,
               !this.props.taskData.isDeleted,
             );
-          }}></Button>
+          }}><Ionicons name={'trash'} color={this.determineColor(this.props.taskData.isDeleted)} size={30}/></Pressable>
       </TouchableOpacity>
     );
   }

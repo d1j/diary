@@ -7,8 +7,8 @@ import TaskEditWindow from './TaskEditWindow';
 export default function EditTaskModal(props) {
   return (
     <Modal
-      style={{backgroundColor: 'yellow',
-          flex: 1, margin: 0,marginTop:180, paddingTop:0, borderTopRightRadius:30, borderTopLeftRadius:30,}}
+      style={{backgroundColor: 'white',
+          flex: 1, margin: 0,marginTop:120, paddingTop:0, borderTopRightRadius:30, borderTopLeftRadius:30,}}
       isVisible={props.isVisible}
       avoidKeyboard={false}
       swipeDirection="down"

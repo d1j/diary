@@ -171,6 +171,7 @@ export default class TaskEditWindow extends Component {
           backgroundColor: 'white',
           flex: 1,
           padding:10,
+          marginTop:20,
           borderTopLeftRadius:30,
           borderTopRightRadius:30
         }}>

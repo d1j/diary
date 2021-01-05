@@ -261,7 +261,7 @@ export default class DayScreen extends Component {
 
           {/* This could be a button that collapses/expands the section */}
           <Text
-            style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
+            style={{paddingLeft:10, color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
             onPress={() => {
               this.setState({
                 isTBTSectionCollapsed: !this.state.isTBTSectionCollapsed,
@@ -280,7 +280,7 @@ export default class DayScreen extends Component {
 
           {/* This could be a button that collapses/expands the section */}
           <Text
-            style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
+            style={{paddingLeft:10,color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
             onPress={() => {
               this.setState({
                 isMTSectionCollapsed: !this.state.isMTSectionCollapsed,
@@ -299,7 +299,7 @@ export default class DayScreen extends Component {
 
           {/* This could be a button that collapses/expands the section */}
           <Text
-            style={{color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
+            style={{paddingLeft:10,color: '#007AFF', fontSize: 28, fontWeight: 'bold'}}
             onPress={() => {
               this.setState({
                 isNotesSectionCollapsed: !this.state.isNotesSectionCollapsed,

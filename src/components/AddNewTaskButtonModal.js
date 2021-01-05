@@ -22,19 +22,19 @@ export default function AddNewTaskButtonModal(props) {
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#E91E63',
-          width: 90,
-          height: 90,
-          borderRadius: 50,
+          backgroundColor: '#2296F3',
+          width: 60,
+          height: 60,
+          borderRadius: 60,
           elevation: 2,
         }}>
-        <Text>Hello</Text>
+        <Text style={{color:'white', fontSize:34}}>+</Text>
         <Modal
           style={{
-            backgroundColor: 'yellow',
+            backgroundColor: 'white',
             flex: 1,
             margin: 0,
-            marginTop: 180,
+            marginTop: 120,
             paddingTop: 0,
             borderTopRightRadius: 30,
             borderTopLeftRadius: 30,
