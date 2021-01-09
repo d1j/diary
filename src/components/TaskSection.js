@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
-import {View} from 'react-native';
-import {Text} from 'react-native-elements';
+import React from 'react';
+import {View, Text} from 'react-native';
 
 import Task from './Task';
 
@@ -8,34 +7,28 @@ import Task from './Task';
  * taskList [Task]
  */
 
-export default class TimeBasedTaskSection extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    if (this.props.taskList.length < 1) {
-      return (
-        <View>
-          <Text>Task list is empty</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View>
-          {this.props.taskList.map((task, idx) => {
-            return (
-              <Task
-                key={idx}
-                taskData={task}
-                editTask={this.props.editTask}
-                setDoneTask={this.props.setDoneTask}
-                setDeleteTask={this.props.setDeleteTask}></Task>
-            );
-          })}
-        </View>
-      );
-    }
+export default function TaskSection(props) {
+  if (props.taskList.length < 1) {
+    return (
+      <View>
+        <Text>Task list is empty</Text>
+      </View>
+    );
+  } else {
+    return (
+      <View>
+        {props.taskList.map((task, idx) => {
+          return (
+            <Task
+              key={idx}
+              taskData={task}
+              editTask={props.editTask}
+              setDoneTask={props.setDoneTask}
+              setDeleteTask={props.setDeleteTask}></Task>
+          );
+        })}
+        <Text>{'\n'}^Long-press task to edit^</Text>
+      </View>
+    );
   }
 }

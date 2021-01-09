@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, Button, View} from 'react-native';
+import {ScrollView, Button} from 'react-native';
 import {Text} from 'react-native-elements';
 import Collapsible from 'react-native-collapsible';
 
@@ -7,14 +7,13 @@ import CalendarButtonModal from '../components/CalendarButtonModal';
 import TaskSection from '../components/TaskSection';
 import NotesSection from '../components/NotesSection';
 import StatsSection from '../components/StatsSection';
-
 import AddNewTaskButtonModal from '../components/AddNewTaskButtonModal';
 
 import _DebugWindow from './_DebugWindow';
 
 import db from '../../schemas/manageRealm';
 
-const isDateInFuture = require('../../helpers/func').isDateInFuture;
+const isDateInFuture = require('../helper_funcs/func').isDateInFuture;
 
 export default class DayScreen extends Component {
   constructor(props) {
@@ -266,7 +265,7 @@ export default class DayScreen extends Component {
               isTBTSectionCollapsed: !this.state.isTBTSectionCollapsed,
             });
           }}>
-          Time based tasks
+          Time based tasks ({this.state.timeBasedTasks.length})
         </Text>
         <Collapsible collapsed={this.state.isTBTSectionCollapsed}>
           <TaskSection
@@ -277,7 +276,6 @@ export default class DayScreen extends Component {
           />
         </Collapsible>
 
-        {/* This could be a button that collapses/expands the section */}
         <Text
           h3
           onPress={() => {
@@ -285,7 +283,7 @@ export default class DayScreen extends Component {
               isMTSectionCollapsed: !this.state.isMTSectionCollapsed,
             });
           }}>
-          Miscellaneous tasks
+          Miscellaneous tasks ({this.state.miscTasks.length})
         </Text>
         <Collapsible collapsed={this.state.isMTSectionCollapsed}>
           <TaskSection
@@ -296,7 +294,6 @@ export default class DayScreen extends Component {
           />
         </Collapsible>
 
-        {/* This could be a button that collapses/expands the section */}
         <Text
           h3
           onPress={() => {

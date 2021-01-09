@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Button, View} from 'react-native';
+import {Button, View, Text} from 'react-native';
+
 import realm from '../../schemas/realm';
 
 const _data = require('../../schemas/data');
@@ -9,10 +10,13 @@ export default class _DebugWindow extends Component {
     super(props);
     this.state = {};
     this._generateData = this._generateData.bind(this);
-    this._showData = this._showData.bind(this);
+    this._displayData = this._displayData.bind(this);
     this._deleteData = this._deleteData.bind(this);
   }
 
+  /**Function will add Day, TimeBasedTask and MiscTask entries to the Realm database.
+   * Those entries can be located at the current date screen `new Date()` and a day before.
+   */
   _generateData() {
     try {
       realm.write(() => {
@@ -20,18 +24,19 @@ export default class _DebugWindow extends Component {
         _data.days.forEach((day) => {
           realm.create('Day', day);
         });
+        console.log('Dev: Day data generated');
 
         //Generate time based tasks
         _data.timeBasedTasks.forEach((task) => {
           realm.create('TimeBasedTask', task);
         });
+        console.log('Dev: Time-based task data generated.');
 
         //Generate misc tasks
         _data.miscTasks.forEach((task) => {
           realm.create('MiscTask', task);
         });
-
-        console.log('Dev: Data generated');
+        console.log('Dev: Misc task data generated');
       });
     } catch (err) {
       console.log(err);
@@ -39,7 +44,7 @@ export default class _DebugWindow extends Component {
     }
   }
 
-  _showData() {
+  _displayData() {
     console.log('Dev: Displaying data');
 
     let days = realm.objects('Day');
@@ -66,6 +71,7 @@ export default class _DebugWindow extends Component {
   render() {
     return (
       <View style={{borderWidth: 4, borderColor: 'red', marginTop: 20}}>
+        <Text>Dev tools</Text>
         <Button
           onPress={() => {
             this._generateData();
@@ -73,14 +79,15 @@ export default class _DebugWindow extends Component {
           title="Generate data"></Button>
         <Button
           onPress={() => {
-            this._showData();
+            this._displayData();
           }}
-          title="Show data"></Button>
+          title="Display data"></Button>
         <Button
           onPress={() => {
             this._deleteData();
           }}
           title="Delete data"></Button>
+        <Text>(reload dev server after deleting data)</Text>
       </View>
     );
   }

@@ -71,8 +71,11 @@ MonthDayStats.schema = {
 class MonthStats extends Realm.Object {}
 MonthStats.schema = {
   name: 'MonthStats',
-  embedded: true,
+  primaryKey: 'id',
   properties: {
+    id: {type: 'int'},
+    year: {type: 'int'},
+    month: {type: 'int', min: 0, max: 11},
     days: {type: 'list', objectType: 'MonthDayStats'},
     averageSleepTime: {type: 'int'},
     averageMood: {type: 'float', min: 1, max: 5},
@@ -81,27 +84,7 @@ MonthStats.schema = {
   },
 };
 
-class Month extends Realm.Object {}
-Month.schema = {
-  name: 'Month',
-  primaryKey: 'id',
-  properties: {
-    id: {type: 'int'},
-    year: {type: 'int'},
-    month: {type: 'int', min: 0, max: 11}, //!!!
-    stats: {type: 'MonthStats'},
-  },
-};
-
 export default new Realm({
-  schema: [
-    TimeBasedTask,
-    MiscTask,
-    Day,
-    DayStats,
-    MonthDayStats,
-    MonthStats,
-    Month,
-  ],
+  schema: [TimeBasedTask, MiscTask, Day, DayStats, MonthDayStats, MonthStats],
   deleteRealmIfMigrationNeeded: true, //TODO: remove in prod
 });

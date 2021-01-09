@@ -1,10 +1,21 @@
 import realm from './realm';
 
+// -------------------------------------
+// Helpers
+// -------------------------------------
+
 const getDayDateInterval = (date) => {
   let start = new Date(date);
   start.setHours(0, 0, 0, 0);
   let end = new Date(start.getTime() + 86400000);
   return {start, end};
+};
+
+const getPrimaryKeyId = (model) => {
+  if (realm.objects(model).max('id')) {
+    return realm.objects(model).max('id') + 1;
+  }
+  return 1;
 };
 
 const realmFilters = {
@@ -14,13 +25,11 @@ const realmFilters = {
   },
 };
 
-const getPrimaryKeyId = (model) => {
-  if (realm.objects(model).max('id')) {
-    return realm.objects(model).max('id') + 1;
-  }
-  return 1;
-};
 // -------------------------------------
+// Exports
+// -------------------------------------
+
+// Day queries
 const addNewEmptyDayEntry = (date) => {
   let newDayData = {
     id: getPrimaryKeyId('Day'),
@@ -44,21 +53,13 @@ const findDay = (date) => {
   return day;
 };
 
-const findTBDayTasks = (date) => {
-  let tasks = realm
-    .objects('TimeBasedTask')
-    .filtered(...realmFilters.dayInterval(date))
-    .sorted('start');
-  return tasks;
+const finishDay = (id) => {
+  realm.write(() => {
+    realm.create('Day', {id, isFinished: true}, true);
+  });
 };
 
-const findMiscDayTasks = (date) => {
-  let tasks = realm
-    .objects('MiscTask')
-    .filtered(...realmFilters.dayInterval(date));
-  return tasks;
-};
-
+// DayStats queries
 const addEmptyStatsEntry = (date) => {
   let newDayStatsData = {
     id: getPrimaryKeyId('DayStats'),
@@ -86,30 +87,26 @@ const findDayStats = (date) => {
   return stats;
 };
 
-const saveBasicNotes = (id, text) => {
+const editStats = (newData) => {
+  //TODO: calculate sleepTime
   realm.write(() => {
-    realm.create('Day', {id, basicNotes: text}, true);
+    realm.create('DayStats', newData, true);
   });
 };
 
-const finishDay = (id) => {
-  realm.write(() => {
-    realm.create('Day', {id, isFinished: true}, true);
-  });
+// TimeBasedTask queries
+const findTBDayTasks = (date) => {
+  let tasks = realm
+    .objects('TimeBasedTask')
+    .filtered(...realmFilters.dayInterval(date))
+    .sorted('start');
+  return tasks;
 };
 
 const addNewTbTask = (data) => {
   data.id = getPrimaryKeyId('TimeBasedTask');
   realm.write(() => {
     realm.create('TimeBasedTask', data);
-  });
-  return data.id;
-};
-
-const addNewMiscTask = (data) => {
-  data.id = getPrimaryKeyId('MiscTask');
-  realm.write(() => {
-    realm.create('MiscTask', data);
   });
   return data.id;
 };
@@ -122,17 +119,33 @@ const removeTbTask = (taskId) => {
   });
 };
 
+const editTbTask = (newData) => {
+  realm.write(() => {
+    realm.create('TimeBasedTask', newData, true);
+  });
+};
+
+// MiscTask queries
+const findMiscDayTasks = (date) => {
+  let tasks = realm
+    .objects('MiscTask')
+    .filtered(...realmFilters.dayInterval(date));
+  return tasks;
+};
+
+const addNewMiscTask = (data) => {
+  data.id = getPrimaryKeyId('MiscTask');
+  realm.write(() => {
+    realm.create('MiscTask', data);
+  });
+  return data.id;
+};
+
 const removeMiscTask = (taskId) => {
   realm.write(() => {
     let task = realm.objectForPrimaryKey('MiscTask', taskId);
     if (task) realm.delete(task);
     else console.log(`Could not remove non-existing miscTask ${taskId}`);
-  });
-};
-
-const editTbTask = (newData) => {
-  realm.write(() => {
-    realm.create('TimeBasedTask', newData, true);
   });
 };
 
@@ -142,10 +155,10 @@ const editMiscTask = (newData) => {
   });
 };
 
-const editStats = (newData) => {
-  //TODO: calculate sleepTime
+// BasicNotes queries
+const saveBasicNotes = (id, text) => {
   realm.write(() => {
-    realm.create('DayStats', newData, true);
+    realm.create('Day', {id, basicNotes: text}, true);
   });
 };
 

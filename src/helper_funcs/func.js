@@ -1,4 +1,5 @@
 export function formatDateWithDashes(date) {
+  if (date == null) return 'YYYY-MM-DD';
   return `${date.getFullYear()}-${
     (date.getMonth() + 1) / 10 < 1
       ? '0' + (date.getMonth() + 1)

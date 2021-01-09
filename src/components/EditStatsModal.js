@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Text, AirbnbRating} from 'react-native-elements';
 import {View, Button} from 'react-native';
+import {Text, AirbnbRating} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
-const formatDate = require('../../helpers/func').formatDateWithDashes;
+const formatHoursMinutes = require('../helper_funcs/func').formatHoursMinutes;
+const formatDate = require('../helper_funcs/func').formatDateWithDashes;
 
 const RatingSection = (props) => {
   return (
@@ -154,7 +154,7 @@ export default class EditStatsModal extends Component {
         />
 
         <SelectDayAndTime
-          time={this.props.wokeUp}
+          time={this.props.wokeUp || this.props.currentDate}
           title="Woke up:"
           submitData={(data) => {
             this.setState({wokeUp: data});
@@ -162,7 +162,7 @@ export default class EditStatsModal extends Component {
         />
 
         <SelectDayAndTime
-          time={this.props.wentToSleep}
+          time={this.props.wentToSleep || this.props.currentDate}
           title="Went to sleep:"
           submitData={(data) => {
             this.setState({wentToSleep: data});

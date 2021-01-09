@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Text, View, Button, TouchableOpacity} from 'react-native';
+
 import EditTaskModal from './EditTaskModal';
 
-const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
+const formatHoursMinutes = require('../helper_funcs/func').formatHoursMinutes;
 
 export default class Task extends Component {
   constructor(props) {

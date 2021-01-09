@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {View, Button, TextInput} from 'react-native';
+import {View, Button, TextInput, ScrollView} from 'react-native';
 import {Text} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {ScrollView} from 'react-native-gesture-handler';
 
-const formatHoursMinutes = require('../../helpers/func').formatHoursMinutes;
-const formatDate = require('../../helpers/func').formatDateWithDashes;
+const formatHoursMinutes = require('../helper_funcs/func').formatHoursMinutes;
+const formatDate = require('../helper_funcs/func').formatDateWithDashes;
 
 /** If you are using this component to update task, provide the following prop:
  * prop.data = {
@@ -103,8 +102,9 @@ export default class TaskEditWindow extends Component {
   }
   submitData() {
     try {
-      //validate time interval
       let returnObject = {taskIsTimeBased: this.state.taskIsTimeBased};
+
+      //validate time interval and set time interval
       if (this.state.taskIsTimeBased) {
         if (this.state.taskStartTime === null && this.state.taskIsTimeBased)
           throw 0;
@@ -115,16 +115,15 @@ export default class TaskEditWindow extends Component {
         )
           throw 2;
 
-        //set time interval
         returnObject.start = this.state.taskStartTime;
         returnObject.end = this.state.taskEndTime;
       }
 
-      //validate task date
+      //validate and set task date
       if (this.state.taskDate === null) throw 3;
       returnObject.date = this.state.taskDate;
 
-      //validate and set task name
+      //val and set task name
       if (this.state.taskName === '' || this.state.taskName === null) throw 4;
       returnObject.taskName = this.state.taskName;
 
@@ -138,10 +137,12 @@ export default class TaskEditWindow extends Component {
         returnObject.initialTaskIsTimeBased = this.state.initialTaskIsTimeBased;
       }
 
+      //set new Task data
       this.props.setData(returnObject);
+      //close modal
       this.props.toggleModal();
     } catch (err) {
-      //TODO: prompt users with error msg
+      //TODO: prompt with error msg on the UI
       switch (err) {
         case 0:
           console.log('Start time not specified');
