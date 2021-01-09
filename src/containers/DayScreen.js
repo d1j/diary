@@ -19,11 +19,11 @@ export default class DayScreen extends Component {
   constructor(props) {
     super(props);
 
-    // Gather data to store in state
+    // Gather data to be stored in state
     let _currentDay = new Date();
     _currentDay.setHours(0, 0, 0, 0);
     let _currentDayData = db.findDay(_currentDay);
-    //
+
     this.state = {
       _testTaskData: {
         id: 1,
@@ -44,7 +44,7 @@ export default class DayScreen extends Component {
 
       isTBTSectionCollapsed: false,
       isMTSectionCollapsed: false,
-      isStatusSectionCollapsed: false,
+      isStatsSectionCollapsed: false,
       isNotesSectionCollapsed: false,
     };
 
@@ -58,9 +58,10 @@ export default class DayScreen extends Component {
   //Calendar
   //-----------------------------------------------------
   setCurrentDate(newDate) {
-    // Find new newDate data
+    // Find data of a new day
     let newCurrentDayData = db.findDay(newDate);
 
+    // Update data
     this.setState({
       currentDate: newDate,
       id: newCurrentDayData.id,
@@ -138,21 +139,13 @@ export default class DayScreen extends Component {
 
     if (taskDate.getTime() === currentDate.getTime()) {
       if (data.taskIsTimeBased) {
-        if (this.state.timeBasedTasks.length < 1) {
-          this.setState({timeBasedTasks: [newTask]});
-        } else {
-          this.setState({
-            timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
-          });
-        }
+        this.setState({
+          timeBasedTasks: db.findTBDayTasks(this.state.currentDate),
+        });
       } else {
-        if (this.state.miscTasks.length < 1) {
-          this.setState({miscTasks: [newTask]});
-        } else {
-          this.setState({
-            miscTasks: db.findMiscDayTasks(this.state.currentDate),
-          });
-        }
+        this.setState({
+          miscTasks: db.findMiscDayTasks(this.state.currentDate),
+        });
       }
     }
   }
@@ -257,7 +250,7 @@ export default class DayScreen extends Component {
           setCurrentDate={this.setCurrentDate}
         />
 
-        {/* This could be a button that collapses/expands the section */}
+        {/* Time-based task section */}
         <Text
           h3
           onPress={() => {
@@ -276,6 +269,7 @@ export default class DayScreen extends Component {
           />
         </Collapsible>
 
+        {/* Miscellaneous task section */}
         <Text
           h3
           onPress={() => {
@@ -294,6 +288,7 @@ export default class DayScreen extends Component {
           />
         </Collapsible>
 
+        {/* Notes section */}
         <Text
           h3
           onPress={() => {
@@ -311,20 +306,20 @@ export default class DayScreen extends Component {
           />
         </Collapsible>
 
-        {/* This could be a button that collapses/expands the section */}
+        {/* Stats section */}
         {this.state.isFinished && (
           <Text
             h3
             onPress={() => {
               this.setState({
-                isStatusSectionCollapsed: !this.state.isStatusSectionCollapsed,
+                isStatsSectionCollapsed: !this.state.isStatsSectionCollapsed,
               });
             }}>
             Stats
           </Text>
         )}
         {this.state.isFinished && (
-          <Collapsible collapsed={this.state.isStatusSectionCollapsed}>
+          <Collapsible collapsed={this.state.isStatsSectionCollapsed}>
             <StatsSection
               stats={this.state.stats}
               currentDate={this.state.currentDate}
@@ -339,7 +334,6 @@ export default class DayScreen extends Component {
             setData={this.addNewTask}
           />
         )}
-
         {!this.state.isFinished && !isDateInFuture(this.state.currentDate) && (
           <Button title="Finish day" onPress={this.finishCurrentDay} />
         )}

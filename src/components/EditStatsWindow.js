@@ -83,7 +83,7 @@ class SelectDayAndTime extends Component {
   }
 }
 
-export default class EditStatsModal extends Component {
+export default class EditStatsWindow extends Component {
   constructor(props) {
     super(props);
 

@@ -4,6 +4,10 @@ import Modal from 'react-native-modal';
 
 import TaskEditWindow from './TaskEditWindow';
 
+/**Required props:
+ * currentDate (new Date())
+ * setData (function)
+ */
 export default function AddNewTaskButtonModal(props) {
   const [isModalVisible, setisModalVisible] = useState(false);
   const toggleModal = () => {

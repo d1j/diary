@@ -1,11 +1,17 @@
 import React, {useState} from 'react';
-import {View, Button} from 'react-native';
+import {View} from 'react-native';
+import {Button} from 'react-native-elements';
 import {CalendarList} from 'react-native-calendars';
 import Modal from 'react-native-modal';
 
 const formatDate = require('../helper_funcs/func').formatDateWithDashes;
 
 //TODO: display marked dates
+
+/**Required props:
+ * currentDate (new Date())
+ * setCurrentDate (function)
+ */
 export default function CalendarButtonModal(props) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [markedDates, setMarkedDate] = useState({
@@ -37,7 +43,11 @@ export default function CalendarButtonModal(props) {
   };
   return (
     <View>
-      <Button title={props.currentDate.toDateString()} onPress={toggleModal} />
+      <Button
+        titleStyle={{fontSize: 24}}
+        title={props.currentDate.toDateString()}
+        onPress={toggleModal}
+      />
       <Modal
         style={{margin: 0, position: 'absolute'}}
         isVisible={isModalVisible}

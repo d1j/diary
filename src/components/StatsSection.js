@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 import Modal from 'react-native-modal';
 
-import EditStatsModal from './EditStatsModal';
+import EditStatsWindow from './EditStatsWindow';
 
 const formatHoursMinutes = require('../helper_funcs/func').formatHoursMinutes;
 const formatDateWithDashes = require('../helper_funcs/func')
   .formatDateWithDashes;
 
-export default class StatsScreen extends Component {
+export default class StatsSection extends Component {
   constructor(props) {
     super(props);
     this.state = {isModalVisible: false};
@@ -28,7 +28,7 @@ export default class StatsScreen extends Component {
           onBackButtonPress={this.toggleModal}
           animationIn="slideInDown"
           animationOut="slideOutUp">
-          <EditStatsModal
+          <EditStatsWindow
             currentDate={this.props.currentDate}
             toggleModal={this.toggleModal}
             stats={this.props.stats}
